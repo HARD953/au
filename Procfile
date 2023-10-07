@@ -1,1 +1,1 @@
-web: gunicorn myot.wsgi --log-file=-
+web: gunicorn auditapi.wsgi --log-file=-
