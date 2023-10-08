@@ -18,7 +18,7 @@ class TotalCollectedDataView(APIView):
         last_collection_date_per_agent = DonneeCollectee.objects.values('agent').annotate(last_collection=Max('date_collecte'))
         total_ads_by_state = DonneeCollectee.objects.values('etat').annotate(total=Count('etat'))
         total_ads_by_visibility = DonneeCollectee.objects.values('visibilite').annotate(total=Count('visibilite'))
-        total_ads_by_owner = DonneeCollectee.objects.values('proprietaire').annotate(total=Count('proprietaire'))
+        # total_ads_by_owner = DonneeCollectee.objects.values('proprietaire').annotate(total=Count('proprietaire'))
         total_ads_by_commune = DonneeCollectee.objects.values('commune').annotate(total=Count('commune'))
         total_lit_ads_by_commune = DonneeCollectee.objects.filter(visibilite='éclairé').values('commune').annotate(total=Count('commune'))
         ads_by_support_type = DonneeCollectee.objects.values('type_support').annotate(total=Count('id'))
@@ -44,7 +44,7 @@ class TotalCollectedDataView(APIView):
                          'last_collection_date_per_agent': last_collection_date_per_agent,
                          'total_ads_by_state': total_ads_by_state,
                          'total_ads_by_visibility': total_ads_by_visibility,
-                         'total_ads_by_owner': total_ads_by_owner,
+                        #  'total_ads_by_owner': total_ads_by_owner,
                          'ads_by_support_type': ads_by_support_type,
                          'total_tax_by_support_type': total_tax_by_support_type,
                          'ads_by_condition': ads_by_condition}, status=status.HTTP_200_OK)
