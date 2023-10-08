@@ -11,6 +11,9 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from .models import CustomUser
 from .serializers import UserSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class DetailConecter(APIView):
     permission_classes=[AllowAny]
@@ -57,3 +60,28 @@ def user_logout(request):
     request.auth.delete()
     logout(request)
     return Response({'message': 'User logged out successfully.'}, status=status.HTTP_200_OK)
+
+# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+#     @classmethod
+#     def get_token(cls, user):
+#         token = super().get_token(user)
+#         token['email'] = user.email
+        
+#         return token
+
+# class MyTokenObtainPairView(TokenObtainPairView):
+#     serializer_class = MyTokenObtainPairSerializer
+
+# class BlacklistTokenUpdateView(APIView):
+#     permission_classes = [AllowAny]
+#     authentication_classes = ()
+    
+#     def post(self, request):
+#         try:
+#             refresh_token = request.data["refresh_token"]
+#             token = RefreshToken(refresh_token)
+#             token.blacklist()
+#             return Response(status=status.HTTP_205_RESET_CONTENT)
+#         except Exception as e:
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
+

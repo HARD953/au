@@ -41,7 +41,7 @@ class DonneeCollectee(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     marque= models.CharField(max_length=50)
-    support_publicitaire = models.ForeignKey(SupportPublicitaire, on_delete=models.CASCADE)
+    type_support = models.ForeignKey(SupportPublicitaire, on_delete=models.CASCADE)
     commune= models.CharField(max_length=50)
     canal= models.CharField(max_length=50)
     type_site= models.CharField(max_length=50)
