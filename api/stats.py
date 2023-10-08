@@ -23,6 +23,11 @@ class TotalCollectedDataView(APIView):
         total_ads_by_owner = DonneeCollectee.objects.values('proprietaire').annotate(total=Count('proprietaire'))
         total_ads_by_commune = DonneeCollectee.objects.values('commune').annotate(total=Count('commune'))
         total_lit_ads_by_commune = DonneeCollectee.objects.filter(visibilite='éclairé').values('commune').annotate(total=Count('commune'))
+        ads_by_support_type = DonneeCollectee.objects.values('support_publicitaire').annotate(total=Count('id'))
+        average_surface_by_support_type = DonneeCollectee.objects.annotate(avg_surface=Avg('surface')).values('support_publicitaire', 'avg_surface')
+        total_tax_by_support_type = DonneeCollectee.objects.values('support_publicitaire').annotate(total_tax=Sum('TSP'))
+        ads_by_condition = DonneeCollectee.objects.values('etat').annotate(total=Count('id'))
+        total_surface_by_condition = DonneeCollectee.objects.filter(etat='Bon état').aggregate(total_surface=Sum('surface'))
         percentage_ads_lit_by_commune = {}
         for commune_data in total_ads_by_commune:
             commune_name = commune_data['commune']
@@ -45,7 +50,12 @@ class TotalCollectedDataView(APIView):
                          'total_ads_by_state': total_ads_by_state,
                          'total_surface_good_condition': total_surface_good_condition,
                          'total_ads_by_visibility': total_ads_by_visibility,
-                         'total_ads_by_owner': total_ads_by_owner}, status=status.HTTP_200_OK)
+                         'total_ads_by_owner': total_ads_by_owner,
+                         'ads_by_support_type': ads_by_support_type,
+                         'average_surface_by_support_type': average_surface_by_support_type,
+                         'total_tax_by_support_type': total_tax_by_support_type,
+                         'ads_by_condition': ads_by_condition,
+                         'total_surface_by_condition': total_surface_by_condition}, status=status.HTTP_200_OK)
     
 
 # class AverageSurfaceView(APIView):
