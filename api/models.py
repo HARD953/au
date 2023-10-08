@@ -48,20 +48,22 @@ class DonneeCollectee(models.Model):
     etat= models.CharField(max_length=50)
     visibilite= models.CharField(max_length=50)
     description= models.CharField(max_length=50)
+    observation= models.CharField(max_length=50)
     date_collecte = models.DateTimeField(auto_now_add=True)
     proprietaire = models.CharField(max_length=50)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
     duree=models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    surface=models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    longueur= models.CharField(max_length=50)
+    largeur= models.CharField(max_length=50)
     TSP = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     ODP = models.BooleanField(default=False)  # Champ ODP
     ODP_value = models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
     def save(self, *args, **kwargs):
         # Calculer le TSP en multipliant la surface par la durée
-        self.TSP = self.surface * self.duree
+        self.TSP = self.largeur * self.longueur * self.duree
         if self.ODP:
-            self.ODP_value = self.surface * self.duree
+            self.ODP_value =  self.largeur*self.longueur * self.duree
         else:
             self.ODP_value = 0
         super(DonneeCollectee, self).save(*args, **kwargs)
