@@ -8,7 +8,6 @@ from django.db.models import*
 class TotalCollectedDataView(APIView):
     def get(self, request):
         total_collected_data = DonneeCollectee.objects.count()
-        average_surface = DonneeCollectee.objects.aggregate(Avg('surface'))['surface__avg']
         average_duration = DonneeCollectee.objects.aggregate(Avg('duree'))['duree__avg']
         total_ads_by_type = DonneeCollectee.objects.values('type_site').annotate(total=Count('type_site'))
         total_ad_tax = DonneeCollectee.objects.aggregate(Sum('TSP'))['TSP__sum']
@@ -18,16 +17,13 @@ class TotalCollectedDataView(APIView):
         collects_per_agent = DonneeCollectee.objects.values('agent').annotate(total=Count('agent'))
         last_collection_date_per_agent = DonneeCollectee.objects.values('agent').annotate(last_collection=Max('date_collecte'))
         total_ads_by_state = DonneeCollectee.objects.values('etat').annotate(total=Count('etat'))
-        total_surface_good_condition = DonneeCollectee.objects.filter(etat='en bon état').aggregate(Sum('surface'))['surface__sum']
         total_ads_by_visibility = DonneeCollectee.objects.values('visibilite').annotate(total=Count('visibilite'))
         total_ads_by_owner = DonneeCollectee.objects.values('proprietaire').annotate(total=Count('proprietaire'))
         total_ads_by_commune = DonneeCollectee.objects.values('commune').annotate(total=Count('commune'))
         total_lit_ads_by_commune = DonneeCollectee.objects.filter(visibilite='éclairé').values('commune').annotate(total=Count('commune'))
         ads_by_support_type = DonneeCollectee.objects.values('type_support').annotate(total=Count('id'))
-        average_surface_by_support_type = DonneeCollectee.objects.annotate(avg_surface=Avg('surface')).values('type_support', 'avg_surface')
         total_tax_by_support_type = DonneeCollectee.objects.values('type_support').annotate(total_tax=Sum('TSP'))
         ads_by_condition = DonneeCollectee.objects.values('etat').annotate(total=Count('id'))
-        total_surface_by_condition = DonneeCollectee.objects.filter(etat='Bon état').aggregate(total_surface=Sum('surface'))
         percentage_ads_lit_by_commune = {}
         for commune_data in total_ads_by_commune:
             commune_name = commune_data['commune']
@@ -38,7 +34,6 @@ class TotalCollectedDataView(APIView):
 
         return Response({'percentage_ads_lit_by_commune': percentage_ads_lit_by_commune,
                          'total_collected_data': total_collected_data,
-                         'average_surface':average_surface,
                          'average_duration': average_duration,
                          'total_ads_by_type': total_ads_by_type,
                          'total_ad_tax': total_ad_tax,
@@ -48,14 +43,11 @@ class TotalCollectedDataView(APIView):
                          'collects_per_agent': collects_per_agent,
                          'last_collection_date_per_agent': last_collection_date_per_agent,
                          'total_ads_by_state': total_ads_by_state,
-                         'total_surface_good_condition': total_surface_good_condition,
                          'total_ads_by_visibility': total_ads_by_visibility,
                          'total_ads_by_owner': total_ads_by_owner,
                          'ads_by_support_type': ads_by_support_type,
-                         'average_surface_by_support_type': average_surface_by_support_type,
                          'total_tax_by_support_type': total_tax_by_support_type,
-                         'ads_by_condition': ads_by_condition,
-                         'total_surface_by_condition': total_surface_by_condition}, status=status.HTTP_200_OK)
+                         'ads_by_condition': ads_by_condition}, status=status.HTTP_200_OK)
     
 
 # class AverageSurfaceView(APIView):
