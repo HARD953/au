@@ -53,8 +53,8 @@ class DonneeCollectee(models.Model):
     proprietaire = models.CharField(max_length=50)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
     duree=models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    longueur= models.CharField(max_length=50)
-    largeur= models.CharField(max_length=50)
+    longueur= models.DecimalField(max_digits=9, decimal_places=6)
+    largeur= models.DecimalField(max_digits=9, decimal_places=6)
     TSP = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     ODP = models.BooleanField(default=False)  # Champ ODP
     ODP_value = models.DecimalField(max_digits=9, decimal_places=2, default=0)

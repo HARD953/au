@@ -4,4 +4,9 @@ from .models import *
 
 admin.site.register(SupportPublicitaire)
 admin.site.register(DonneeCollectee)
+admin.site.register(Site)
+admin.site.register(Canal)
+admin.site.register(Marque)
+admin.site.register(Visibilite)
+admin.site.register(Etat)
 
