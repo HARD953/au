@@ -82,23 +82,23 @@ WSGI_APPLICATION = 'auditapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'railway',   # Replace with your database name
-#         'USER': 'postgres',       # Replace with your database username
-#         'PASSWORD': 'DB45a3+b6+aaGaA-bGC+351EF4DfD6gB',  # Replace with your database password
-#         'HOST': 'monorail.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-#         'PORT': '15003',         # Replace with your database port if needed (the default is 3306)
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',   # Replace with your database name
+        'USER': 'postgres',       # Replace with your database username
+        'PASSWORD': 'a2gegg5AeeCGEEf+536df6DDbbggcGAg',  # Replace with your database password
+        'HOST': 'roundhouse.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
+        'PORT': '27885',         # Replace with your database port if needed (the default is 3306)
+    }
+}
 
 
 # Password validation
@@ -163,8 +163,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:3000",
     "https://127.0.0.1:8000",
     "http://127.0.0.1:9000",
-    # "https://auditvisibilite.lanfiasave.com/",
-    # "http://auditvisibilite.lanfiasave.com/"
+    "https://auditvisibilite.lanfiasave.com/",
+    "http://auditvisibilite.lanfiasave.com/"
     ]
 
 CORS_ALLOW_METHODS = [
