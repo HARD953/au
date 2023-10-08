@@ -8,9 +8,19 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate, logout, login
 from .serializers import UserLoginSerializer, UserLogoutSerializer
 from rest_framework import generics
-
+from rest_framework.views import APIView
 from .models import CustomUser
 from .serializers import UserSerializer
+
+class DetailConecter(APIView):
+    permission_classes=[AllowAny]
+    def get(self,request):
+        if self.request.user.is_authenticated:
+            dons=CustomUser.objects.filter(email=self.request.user.email)
+            serializer=UserSerializer(dons, many=True)
+            return Response({'data':serializer.data,'status':status.HTTP_200_OK})
+        else:
+            return Response({'status':status.HTTP_400_BAD_REQUEST})
 
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()

@@ -44,6 +44,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     departement = models.CharField(max_length=100, blank=False)
     sous_prefecture = models.CharField(max_length=100, blank=False)
     commune = models.CharField(max_length=100, blank=False)
+    
 
     objects = CustomUserManager()
 

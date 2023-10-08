@@ -9,5 +9,6 @@ urlpatterns = [
     path('logout/', user_logout, name='user-logout'),
     path('users/', UserListCreateView.as_view(), name='user-list-create'),  # Liste et création d'utilisateurs
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),  # Détails, mise à jour et suppression d'un utilisateur
+    path('detailadimn/', DetailConecter.as_view(),name='detail-des-admin'),
     # ... Autres URL pour d'autres vues si nécessaire
 ]

@@ -24,8 +24,6 @@ class TotalAdsByTypeView(APIView):
         total_ads_by_type = DonneeCollectee.objects.values('type_site').annotate(total=Count('type_site'))
         return Response({'total_ads_by_type': total_ads_by_type}, status=status.HTTP_200_OK)
     
-
-
 class TotalAdTaxView(APIView):
     def get(self, request):
         total_ad_tax = DonneeCollectee.objects.aggregate(Sum('TSP'))['TSP__sum']
@@ -41,7 +39,6 @@ class AverageAdTaxPerMonthView(APIView):
         average_ad_tax_per_month = DonneeCollectee.objects.annotate(month=TruncMonth('date_collecte')).values('month').annotate(average_tax=Avg('TSP'))
         return Response({'average_ad_tax_per_month': average_ad_tax_per_month}, status=status.HTTP_200_OK)
     
-
 class TotalAgentsView(APIView):
     def get(self, request):
         total_agents = DonneeCollectee.objects.values('agent').distinct().count()

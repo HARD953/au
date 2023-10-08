@@ -10,6 +10,31 @@ class SupportPublicitaire(models.Model):
     taux=models.IntegerField()
     def __str__(self):
         return self.type_support
+    
+class Marque(models.Model):
+    marque = models.CharField(max_length=50)
+    def __str__(self):
+        return self.marque
+    
+class Canal(models.Model):
+    canal = models.CharField(max_length=50)
+    def __str__(self):
+        return self.canal
+    
+class Site(models.Model):
+    site = models.CharField(max_length=50)
+    def __str__(self):
+        return self.site
+    
+class Etat(models.Model):
+    etat = models.CharField(max_length=50)
+    def __str__(self):
+        return self.etat
+    
+class Visibilite(models.Model):
+    visibilite = models.CharField(max_length=50)
+    def __str__(self):
+        return self.visibilite
 
 class DonneeCollectee(models.Model):
     agent= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
