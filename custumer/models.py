@@ -33,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     adresse = models.CharField(max_length=300, blank=True, null=True)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    profile_image = models.ImageField(upload_to='user_image/', null=True, blank=True)
+    # profile_image = models.ImageField(upload_to='user_image/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
