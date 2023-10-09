@@ -51,7 +51,7 @@ class DonneeCollectee(models.Model):
     observation= models.CharField(max_length=50)
     date_collecte = models.DateTimeField(auto_now_add=True)
     # proprietaire = models.CharField(max_length=50)
-    image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
+    # image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
     duree=models.DecimalField(max_digits=9, decimal_places=2, default=0)
     longueur= models.DecimalField(max_digits=9, decimal_places=6)
     largeur= models.DecimalField(max_digits=9, decimal_places=6)
@@ -71,4 +71,4 @@ class DonneeCollectee(models.Model):
     # Ajoutez d'autres champs pour les données collectées, comme des statistiques, etc.
 
     def __str__(self):
-        return f"Donnée #{self.id} pour {self.support_publicitaire}"
+        return f"Donnée #{self.id} pour {self.type_support}"
