@@ -10,9 +10,9 @@ class DonneeCollecteeListCreateView(generics.ListCreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer
     
-    def perform_create(self, serializer):
-        # Lier l'utilisateur connecté à l'objet créé
-        serializer.save(agent=self.request.user)
+    # def perform_create(self, serializer):
+    #     # Lier l'utilisateur connecté à l'objet créé
+    #     serializer.save(agent=self.request.user)
 
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = DonneeCollectee.objects.all()

@@ -1,36 +1,38 @@
+from .models import DonneeCollectee
+from django.db.models import*
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Count, Avg, Sum
 from django.db.models.functions import TruncMonth
-from .models import DonneeCollectee
-from django.db.models import*
+from django.db.models import Max
+from .models import DonneeCollectee  # Assurez-vous d'importer votre modèle
 
 class TotalCollectedDataView(APIView):
     def get(self, request):
         total_collected_data = DonneeCollectee.objects.count()
         average_duration = DonneeCollectee.objects.aggregate(Avg('duree'))['duree__avg']
-        total_ads_by_type = DonneeCollectee.objects.values('type_site').annotate(total=Count('type_site'))
+        total_ads_by_type = DonneeCollectee.objects.values('type_support').annotate(total=Count('type_support'))
         total_ad_tax = DonneeCollectee.objects.aggregate(Sum('TSP'))['TSP__sum']
         total_odp = DonneeCollectee.objects.aggregate(Sum('ODP_value'))['ODP_value__sum']
         average_ad_tax_per_month = DonneeCollectee.objects.annotate(month=TruncMonth('date_collecte')).values('month').annotate(average_tax=Avg('TSP'))
         total_agents = DonneeCollectee.objects.values('agent').distinct().count()
         collects_per_agent = DonneeCollectee.objects.values('agent').annotate(total=Count('agent'))
         last_collection_date_per_agent = DonneeCollectee.objects.values('agent').annotate(last_collection=Max('date_collecte'))
-        total_ads_by_state = DonneeCollectee.objects.values('etat').annotate(total=Count('etat'))
+        total_ads_by_state = DonneeCollectee.objects.values('etat_support').annotate(total=Count('etat_support'))
         total_ads_by_visibility = DonneeCollectee.objects.values('visibilite').annotate(total=Count('visibilite'))
-        # total_ads_by_owner = DonneeCollectee.objects.values('proprietaire').annotate(total=Count('proprietaire'))
         total_ads_by_commune = DonneeCollectee.objects.values('commune').annotate(total=Count('commune'))
-        total_lit_ads_by_commune = DonneeCollectee.objects.filter(visibilite='éclairé').values('commune').annotate(total=Count('commune'))
-        ads_by_support_type = DonneeCollectee.objects.values('type_support').annotate(total=Count('id'))
+        print(total_ads_by_commune)
+        total_lit_ads_by_commune = DonneeCollectee.objects.filter(visibilite='eclaire').values('commune').annotate(total=Count('commune'))
+        ads_by_support_type = DonneeCollectee.objects.values('type_support').annotate(total=Count('type_support'))
         total_tax_by_support_type = DonneeCollectee.objects.values('type_support').annotate(total_tax=Sum('TSP'))
-        ads_by_condition = DonneeCollectee.objects.values('etat').annotate(total=Count('id'))
+        ads_by_condition = DonneeCollectee.objects.values('etat_support').annotate(total=Count('etat_support'))
         percentage_ads_lit_by_commune = {}
         for commune_data in total_ads_by_commune:
             commune_name = commune_data['commune']
             total_ads = commune_data['total']
-            total_lit_ads = next((item['total'] for item in total_lit_ads_by_commune if item['commune'] == commune_name), 0)
-            percentage = (total_lit_ads / total_ads) * 100 if total_ads > 0 else 0
-            percentage_ads_lit_by_commune[commune_name] = round(percentage, 2)
+           
+            percentage_ads_lit_by_commune[commune_name] = total_ads
 
         return Response({'percentage_ads_lit_by_commune': percentage_ads_lit_by_commune,
                          'total_collected_data': total_collected_data,
@@ -44,10 +46,12 @@ class TotalCollectedDataView(APIView):
                          'last_collection_date_per_agent': last_collection_date_per_agent,
                          'total_ads_by_state': total_ads_by_state,
                          'total_ads_by_visibility': total_ads_by_visibility,
-                        #  'total_ads_by_owner': total_ads_by_owner,
                          'ads_by_support_type': ads_by_support_type,
                          'total_tax_by_support_type': total_tax_by_support_type,
-                         'ads_by_condition': ads_by_condition}, status=status.HTTP_200_OK)
+                         'ads_by_condition': ads_by_condition
+                        }, status=status.HTTP_200_OK)
+
+
     
 
 # class AverageSurfaceView(APIView):
