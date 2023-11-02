@@ -32,55 +32,55 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def user_login(request):
-    serializer = UserLoginSerializer(data=request.data)
-    if serializer.is_valid():
-        email = serializer.validated_data['email']
-        password = serializer.validated_data['password']
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['email'] = user.email
         
-        user = authenticate(request, email=email, password=password)
-        
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                token, created = Token.objects.get_or_create(user=user)
-                return Response({'token': token.key}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'User account is disabled.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'error': 'Invalid credentials.'}, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return token
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def user_logout(request):
-    request.auth.delete()
-    logout(request)
-    return Response({'message': 'User logged out successfully.'}, status=status.HTTP_200_OK)
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
-# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super().get_token(user)
-#         token['email'] = user.email
-        
-#         return token
-
-# class MyTokenObtainPairView(TokenObtainPairView):
-#     serializer_class = MyTokenObtainPairSerializer
-
-# class BlacklistTokenUpdateView(APIView):
-#     permission_classes = [AllowAny]
-#     authentication_classes = ()
+class BlacklistTokenUpdateView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = ()
     
-#     def post(self, request):
-#         try:
-#             refresh_token = request.data["refresh_token"]
-#             token = RefreshToken(refresh_token)
-#             token.blacklist()
-#             return Response(status=status.HTTP_205_RESET_CONTENT)
-#         except Exception as e:
-#             return Response(status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# @api_view(['POST'])
+# @permission_classes([AllowAny])
+# def user_login(request):
+#     serializer = UserLoginSerializer(data=request.data)
+#     if serializer.is_valid():
+#         email = serializer.validated_data['email']
+#         password = serializer.validated_data['password']
+        
+#         user = authenticate(request, email=email, password=password)
+        
+#         if user is not None:
+#             if user.is_active:
+#                 login(request, user)
+#                 token, created = Token.objects.get_or_create(user=user)
+#                 return Response({'token': token.key}, status=status.HTTP_200_OK)
+#             else:
+#                 return Response({'error': 'User account is disabled.'}, status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#             return Response({'error': 'Invalid credentials.'}, status=status.HTTP_400_BAD_REQUEST)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def user_logout(request):
+#     request.auth.delete()
+#     logout(request)
+#     return Response({'message': 'User logged out successfully.'}, status=status.HTTP_200_OK)
