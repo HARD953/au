@@ -43,8 +43,8 @@ class DonneeCollectee(models.Model):
     Marque = models.CharField(max_length=50, blank=True)
     commune = models.CharField(max_length=50, blank=True)
     type_support = models.CharField(max_length=50, blank=True)
-    surface = models.FloatField(blank=True)
-    surfaceODP = models.FloatField(blank=True)
+    surface = models.CharField(max_length=50,blank=True)
+    surfaceODP = models.CharField(max_length=50,blank=True)
     canal = models.CharField(max_length=50, blank=True)
     etat_support = models.CharField(max_length=50, blank=True)
     visibilite = models.CharField(max_length=50, blank=True)
@@ -52,12 +52,12 @@ class DonneeCollectee(models.Model):
     observation = models.CharField(max_length=50, blank=True)
     date_collecte = models.DateTimeField(auto_now_add=True, blank=True)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
-    duree = models.FloatField(blank=True)
-    TSP = models.FloatField(blank=True,default=12)
+    duree = models.CharField(max_length=50,blank=True)
+    TSP = models.CharField(max_length=50,blank=True,default=12)
     ODP = models.BooleanField(default=False, blank=True)
-    ODP_value = models.FloatField(blank=True,default=1)
-    latitude= models.FloatField(blank=True,default=1)
-    longitude= models.FloatField(blank=True,default=1)
+    ODP_value = models.CharField(max_length=50,blank=True,default=1)
+    latitude= models.CharField(max_length=50,blank=True,default="1")
+    longitude= models.CharField(max_length=50,blank=True,default="1")
 
     # def save(self, *args, **kwargs):
     #     # Calculer le TSP en multipliant la surface par la durée
