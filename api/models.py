@@ -39,26 +39,26 @@ class Visibilite(models.Model):
 
 class DonneeCollectee(models.Model):
     agent = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True,default="issa@gmail.com")
-    entreprise = models.CharField(max_length=50)
-    Marque = models.CharField(max_length=50)
-    commune = models.CharField(max_length=50)
-    type_support = models.CharField(max_length=50)
-    surface = models.FloatField()
-    surfaceODP = models.FloatField()
-    canal = models.CharField(max_length=50)
-    etat_support = models.CharField(max_length=50)
-    visibilite = models.CharField(max_length=50)
-    description = models.CharField(max_length=50)
-    observation = models.CharField(max_length=50)
-    date_collecte = models.DateTimeField(auto_now_add=True)
+    entreprise = models.CharField(max_length=50, blank=True)
+    Marque = models.CharField(max_length=50, blank=True)
+    commune = models.CharField(max_length=50, blank=True)
+    type_support = models.CharField(max_length=50, blank=True)
+    surface = models.FloatField(blank=True)
+    surfaceODP = models.FloatField(blank=True)
+    canal = models.CharField(max_length=50, blank=True)
+    etat_support = models.CharField(max_length=50, blank=True)
+    visibilite = models.CharField(max_length=50, blank=True)
+    description = models.CharField(max_length=50, blank=True)
+    observation = models.CharField(max_length=50, blank=True)
+    date_collecte = models.DateTimeField(auto_now_add=True, blank=True)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
-    duree = models.FloatField()
+    duree = models.FloatField(blank=True)
     TSP = models.FloatField(blank=True)
-    ODP = models.BooleanField(default=False)
+    ODP = models.BooleanField(default=False, blank=True)
     ODP_value = models.FloatField(blank=True)
     latitude= models.FloatField(blank=True)
     longitude= models.FloatField(blank=True)
-    
+
     def save(self, *args, **kwargs):
         # Calculer le TSP en multipliant la surface par la durée
         self.TSP = self.surface*self.duree
