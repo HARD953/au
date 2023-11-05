@@ -166,9 +166,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "http://127.0.0.1:9000",
     "https://myhot.up.railway.app/",
-    "http://myhot.up.railway.app/"
-    "https://auditvisibilite.lanfiasave.com/",
-    "http://auditvisibilite.lanfiasave.com/"
+    "http://myhot.up.railway.app/",
+    "https://auditvisibilite.lanfiasave.com",
+    "http://auditvisibilite.lanfiasave.com"
     ]
 
 CORS_ALLOW_METHODS = [
