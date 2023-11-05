@@ -82,23 +82,23 @@ WSGI_APPLICATION = 'auditapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'railway',   # Replace with your database name
-#         'USER': 'postgres',       # Replace with your database username
-#         'PASSWORD': 'Cf*A126-5A3g13e53D1B1f1Ge63eaaD*',  # Replace with your database password
-#         'HOST': 'monorail.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-#         'PORT': '27387',         # Replace with your database port if needed (the default is 3306)
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',   # Replace with your database name
+        'USER': 'postgres',       # Replace with your database username
+        'PASSWORD': '3f1gBG-1d*2D-GDcBcFFdddFF3Dg-EAg',  # Replace with your database password
+        'HOST': 'monorail.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
+        'PORT': '15264',         # Replace with your database port if needed (the default is 3306)
+    }
+}
 
 
 # Password validation
