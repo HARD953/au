@@ -9,12 +9,12 @@ from .serializers import *
 class DonneeCollecteeCreateView(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer
-    def perform_create(self, serializer):
-        # Associer l'utilisateur connecté comme propriétaire du Bien
-        if self.request.user.is_anonymous:
-            serializer.save()
-        else:
-            serializer.save(agent=self.request.user)
+    # def perform_create(self, serializer):
+    #     # Associer l'utilisateur connecté comme propriétaire du Bien
+    #     if self.request.user.is_anonymous:
+    #         serializer.save()
+    #     else:
+    #         serializer.save(agent=self.request.user)
 
 class DonneeCollecteeListView(generics.ListAPIView):
     serializer_class = DonneeCollecteeSerializer

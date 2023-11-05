@@ -38,7 +38,7 @@ class Visibilite(models.Model):
         return self.visibilite
 
 class DonneeCollectee(models.Model):
-    agent = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True,default="issa@gmail.com")
+    # agent = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True,default="issa@gmail.com")
     entreprise = models.CharField(max_length=50, blank=True)
     Marque = models.CharField(max_length=50, blank=True)
     commune = models.CharField(max_length=50, blank=True)
@@ -53,20 +53,20 @@ class DonneeCollectee(models.Model):
     date_collecte = models.DateTimeField(auto_now_add=True, blank=True)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
     duree = models.FloatField(blank=True)
-    TSP = models.FloatField(blank=True)
+    TSP = models.FloatField(blank=True,default=12)
     ODP = models.BooleanField(default=False, blank=True)
-    ODP_value = models.FloatField(blank=True)
-    latitude= models.FloatField(blank=True)
-    longitude= models.FloatField(blank=True)
+    ODP_value = models.FloatField(blank=True,default=1)
+    latitude= models.FloatField(blank=True,default=1)
+    longitude= models.FloatField(blank=True,default=1)
 
-    def save(self, *args, **kwargs):
-        # Calculer le TSP en multipliant la surface par la durée
-        self.TSP = self.surface*self.duree
-        if self.ODP:
-            self.ODP_value =  self.surfaceODP*self.duree
-        else:
-            self.ODP_value = 0
-        super(DonneeCollectee, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     # Calculer le TSP en multipliant la surface par la durée
+    #     self.TSP = self.surface*self.duree
+    #     if self.ODP:
+    #         self.ODP_value =  self.surfaceODP*self.duree
+    #     else:
+    #         self.ODP_value = 0
+    #     super(DonneeCollectee, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Donnée #{self.id} pour {self.type_support}"
