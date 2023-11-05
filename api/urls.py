@@ -3,8 +3,8 @@ from .views import *
 from .stats import *
 
 urlpatterns = [
-    path('donneescollectees/', DonneeCollecteeListView.as_view(), name='donnee-collectee-list-create'),
-    path('collectedata/', DonneeCollecteeCreateView.as_view(), name='donnee-collectee-list-create'),
+    path('donneescollectees/', DonneeCollecteeListView.as_view(), name='donnee-collectee-list'),
+    path('collectedata/', DonneeCollecteeCreateView.as_view(), name='donnee-collectee-create'),
     path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('supports/', SupportPublicitaireListView.as_view(), name='support-publicitaire-list'),
     path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name='support-publicitaire-detail'),

@@ -59,14 +59,14 @@ class DonneeCollectee(models.Model):
     latitude= models.CharField(max_length=50,blank=True,default="1")
     longitude= models.CharField(max_length=50,blank=True,default="1")
 
-    # def save(self, *args, **kwargs):
-    #     # Calculer le TSP en multipliant la surface par la durée
-    #     self.TSP = self.surface*self.duree
-    #     if self.ODP:
-    #         self.ODP_value =  self.surfaceODP*self.duree
-    #     else:
-    #         self.ODP_value = 0
-    #     super(DonneeCollectee, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # Calculer le TSP en multipliant la surface par la durée
+        self.TSP = float(self.surface)*float(self.duree)
+        if self.ODP:
+            self.ODP_value =  float(self.surfaceODP)*float(self.duree)
+        else:
+            self.ODP_value = 0
+        super(DonneeCollectee, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Donnée #{self.id} pour {self.type_support}"
