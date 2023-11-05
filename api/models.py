@@ -56,7 +56,9 @@ class DonneeCollectee(models.Model):
     TSP = models.FloatField(blank=True)
     ODP = models.BooleanField(default=False)
     ODP_value = models.FloatField(blank=True)
-
+    latitude= models.FloatField(blank=True)
+    longitude= models.FloatField(blank=True)
+    
     def save(self, *args, **kwargs):
         # Calculer le TSP en multipliant la surface par la durée
         self.TSP = self.surface*self.duree
