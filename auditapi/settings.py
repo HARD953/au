@@ -94,9 +94,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',   # Replace with your database name
         'USER': 'postgres',       # Replace with your database username
-        'PASSWORD': '3f1gBG-1d*2D-GDcBcFFdddFF3Dg-EAg',  # Replace with your database password
-        'HOST': 'monorail.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-        'PORT': '15264',         # Replace with your database port if needed (the default is 3306)
+        'PASSWORD': 'GA-C135cEBb*6BAfA5365DG5Eac*3b1c',  # Replace with your database password
+        'HOST': 'roundhouse.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
+        'PORT': '58163',         # Replace with your database port if needed (the default is 3306)
     }
 }
 
@@ -156,19 +156,7 @@ AUTH_USER_MODEL = 'custumer.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://127.0.0.1:3000",
-    "http://127.0.0.1:8000",
-    "https://127.0.0.1:8000",
-    "http://localhost:8000",
-    "https://localhost:8000",
-    "http://127.0.0.1:9000",
-    "https://myhot.up.railway.app/",
-    "http://myhot.up.railway.app/",
-    "https://auditvisibilite.lanfiasave.com",
-    "http://auditvisibilite.lanfiasave.com"
+    '*'
     ]
 
 CORS_ALLOW_METHODS = [

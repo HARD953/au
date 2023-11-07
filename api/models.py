@@ -47,6 +47,7 @@ class DonneeCollectee(models.Model):
     surfaceODP = models.CharField(max_length=50,blank=True)
     canal = models.CharField(max_length=50, blank=True)
     etat_support = models.CharField(max_length=50, blank=True)
+    typesite = models.CharField(max_length=50, blank=True)
     visibilite = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=50, blank=True)
     observation = models.CharField(max_length=50, blank=True)
@@ -56,8 +57,8 @@ class DonneeCollectee(models.Model):
     TSP = models.CharField(max_length=50,blank=True,default=12)
     ODP = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50,blank=True,default=1)
-    latitude= models.CharField(max_length=50,blank=True,default="1")
-    longitude= models.CharField(max_length=50,blank=True,default="1")
+    latitude= models.FloatField()
+    longitude= models.FloatField()
 
     def save(self, *args, **kwargs):
         # Calculer le TSP en multipliant la surface par la durée

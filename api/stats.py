@@ -52,7 +52,6 @@ class TotalCollectedDataView(APIView):
                         }, status=status.HTTP_200_OK)
 
 
-    
 
 # class AverageSurfaceView(APIView):
 #     def get(self, request):
