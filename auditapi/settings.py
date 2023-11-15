@@ -78,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'auditapi.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -94,9 +93,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',   # Replace with your database name
         'USER': 'postgres',       # Replace with your database username
-        'PASSWORD': 'GGAcF25C44fG66Fd*GCbFbe5Be4gGD3E',  # Replace with your database password
+        'PASSWORD': 'f-d4*cbf4GBC1C3B26ebA4GE3F6AaBeg',  # Replace with your database password
         'HOST': 'roundhouse.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-        'PORT': '59681',         # Replace with your database port if needed (the default is 3306)
+        'PORT': '37009',         # Replace with your database port if needed (the default is 3306)
     }
 }
 
