@@ -2,6 +2,7 @@ from django.urls import path
 from .views import *
 from .stats import *
 from .statis2 import *
+from .marque1 import *
 
 urlpatterns = [
     path('donneescollectees/', DonneeCollecteeListView.as_view(), name='donnee-collectee-list'),
@@ -17,7 +18,8 @@ urlpatterns = [
 
     # Statistiques générales
     path('gcollecte/', GTotalCollectedDataView.as_view(), name='general-statistics'),
-    path('collecte/', TotalCollectedDataView.as_view(), name='statistics'),
+    path('collecte/', TotalCollectedDataView.as_view(), name='statistics-etat'),
+    path('collectem/', GTotalCollectedDataViewM.as_view(), name='statistics-marque'),
     # # Statistiques par emplacement géographique
     # path('api/statistiques/geographique/', AverageSurfaceView.as_view(), name='geographical-statistics'),
     # # Statistiques par type de support publicitaire

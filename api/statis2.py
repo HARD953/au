@@ -51,6 +51,7 @@ class GTotalCollectedDataView(APIView):
             montant_total_Deteriore_odp,
             montant_total_Deteriore
         ) = get_montants('Détérioré')
+        
 
         return Response({
             'nombre_total': nombre_total,
