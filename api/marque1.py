@@ -70,10 +70,10 @@ class GTotalCollectedDataViewM(APIView):
             aggregations[commune] = commune_aggregations
 
         return Response({
-            'nombre_total': nombre_total,
-            'montant_total_tsp': montant_total_tsp,
-            'montant_total_odp': montant_total_odp,
-            'montant_total': montant_total,
+            # 'nombre_total': nombre_total,
+            # 'montant_total_tsp': montant_total_tsp,
+            # 'montant_total_odp': montant_total_odp,
+            # 'montant_total': montant_total,
 
             'aggregations': aggregations,
         }, status=status.HTTP_200_OK)
