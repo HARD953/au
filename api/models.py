@@ -36,6 +36,7 @@ class Visibilite(models.Model):
     visibilite = models.CharField(max_length=50)
     def __str__(self):
         return self.visibilite
+    
 
 class DonneeCollectee(models.Model):
     # agent = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True,default="issa@gmail.com")
@@ -57,14 +58,16 @@ class DonneeCollectee(models.Model):
     TSP = models.CharField(max_length=50,blank=True,default=12)
     ODP = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50,blank=True,default=1)
+    tauxODP = models.CharField(max_length=50,blank=True,default=6)
+    tauxTSP = models.CharField(max_length=50,blank=True,default=6)
     latitude= models.FloatField()
     longitude= models.FloatField()
 
     def save(self, *args, **kwargs):
         # Calculer le TSP en multipliant la surface par la durée
-        self.TSP = float(self.surface)*float(self.duree)
+        self.TSP = float(self.surface)*float(self.duree)*float(self.tauxTSP)
         if self.ODP:
-            self.ODP_value =  float(self.surfaceODP)*float(self.duree)
+            self.ODP_value =  float(self.surfaceODP)*float(self.duree)*float(self.tauxODP)
         else:
             self.ODP_value = 0
         super(DonneeCollectee, self).save(*args, **kwargs)

@@ -38,7 +38,6 @@ class GTotalCollectedDataViewM(APIView):
                 montant_total_odp_commune_marque_etat,
                 montant_total_commune_marque_etat,
             )
-
         # Agrégations par commune, par marque et par état
         communes = DonneeCollectee.objects.values('commune').distinct()
         marques = Marque.objects.values('marque').distinct()

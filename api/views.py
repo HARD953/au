@@ -9,6 +9,15 @@ from .serializers import *
 class DonneeCollecteeCreateView(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer
+
+class TauxODPCreateView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DonneeCollectee.objects.all()
+    serializer_class = TauxODPSerializer
+
+class TauxTSPCreateView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DonneeCollectee.objects.all()
+    serializer_class = TauxTSPSerializer
+
     # def perform_create(self, serializer):
     #     # Associer l'utilisateur connecté comme propriétaire du Bien
     #     if self.request.user.is_anonymous:

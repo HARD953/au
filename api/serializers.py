@@ -4,8 +4,17 @@ from .models import *
 class DonneeCollecteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonneeCollectee
-        fields = '__all__'
+        exclude = ['tauxODP', 'tauxTSP']
+        
+class TauxODPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonneeCollectee
+        fields = ["tauxODP"]
 
+class TauxTSPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonneeCollectee
+        fields = ["tauxTSP"]
 
 class SupportPublicitaireSerializer(serializers.ModelSerializer):
     class Meta:
