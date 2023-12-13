@@ -39,7 +39,7 @@ class Visibilite(models.Model):
     
 
 class DonneeCollectee(models.Model):
-    # agent = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True,default="issa@gmail.com")
+    # agent = models.ForeignKey(CustomUser, v ,default="issa@gmail.com")
     entreprise = models.CharField(max_length=50, blank=True)
     Marque = models.CharField(max_length=50, blank=True)
     commune = models.CharField(max_length=50, blank=True)
