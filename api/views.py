@@ -84,7 +84,4 @@ class CommuneApp(generics.ListAPIView):
     queryset = Commune.objects.all()
     serializer_class = CommuneSerializersApp
 
-class EntrepriseLists(generics.ListAPIView):
-    queryset = DonneeCollectee.objects.all()
-    serializer_class = EntrepriseSerializers
 

@@ -14,6 +14,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from .serializers import *
+
 class DetailConecter(APIView):
     permission_classes=[AllowAny]
     def get(self,request):
@@ -56,6 +58,11 @@ class BlacklistTokenUpdateView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class UserSerializer1(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer1
+
 
 # @api_view(['POST'])
 # @permission_classes([AllowAny])

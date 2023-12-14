@@ -18,7 +18,7 @@ urlpatterns = [
     path('canal/', CanalListView.as_view(), name='canal'),
     path('marque/', MarqueListView.as_view(), name='marque'),
     path('site/', SiteListView.as_view(), name='site'),
-    path('entreprise/', EntrepriseLists.as_view(), name='entreprise'),
+    
 
     # Statistiques générales
     path('gcollecte/', GTotalCollectedDataView.as_view(), name='general-statistics'),
