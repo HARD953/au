@@ -36,6 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     profile_image = models.ImageField(upload_to='user_image/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_agent = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_user = models.BooleanField(default=False)
     last_login = models.DateTimeField(default=timezone.now())
@@ -44,8 +45,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     departement = models.CharField(max_length=100, blank=False)
     sous_prefecture = models.CharField(max_length=100, blank=False)
     commune = models.CharField(max_length=100, blank=False)
+    entreprise=models.CharField(max_length=300, blank=True, null=True)
     
-
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

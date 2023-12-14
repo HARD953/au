@@ -1,5 +1,4 @@
 # api/serializers.py
-
 from rest_framework import serializers
 
 class UserLoginSerializer(serializers.Serializer):
@@ -27,3 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    
+class UserSerializer1(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['entreprise']

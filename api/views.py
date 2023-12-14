@@ -5,36 +5,31 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
+from custumer.models import*
+from custumer.serializers import UserSerializer1
 
-class DonneeCollecteeCreateView(generics.CreateAPIView):
+class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer
+    permission_classes = [IsAuthenticated]
+    def perform_create(self, serializer):
+        # Associer l'utilisateur connecté comme propriétaire du Bien
+        if self.request.user.is_anonymous:
+            serializer.save()
+        else:
+            serializer.save(agent=self.request.user)
 
-class TauxODPCreateView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = DonneeCollectee.objects.all()
-    serializer_class = TauxODPSerializer
-
-class TauxTSPCreateView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = DonneeCollectee.objects.all()
-    serializer_class = TauxTSPSerializer
-
-    # def perform_create(self, serializer):
-    #     # Associer l'utilisateur connecté comme propriétaire du Bien
-    #     if self.request.user.is_anonymous:
-    #         serializer.save()
-    #     else:
-    #         serializer.save(agent=self.request.user)
-
-class DonneeCollecteeListView(generics.ListAPIView):
-    serializer_class = DonneeCollecteeSerializer
+class DonneeCollecteeList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DonneeCollecteeSerializer# Assurez-vous que l'utilisateur est authentifié
     def get_queryset(self):
-        # if self.request.user.is_authenticated:
-        #     # Filtrer les objets Bien pour l'utilisateur connecté
-        #     return DonneeCollectee.objects.filter(agent=self.request.user)
-        # else:
-        #     # Renvoyer tous les objets Bien si personne n'est connecté
-        return DonneeCollectee.objects.all()
-       
+        # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
+        user = self.request.user
+        if user.is_user:  # Vérifie si l'utilisateur est connecté
+            return DonneeCollectee.objects.filter(entreprise=user.entreprise)
+        else:
+            return DonneeCollectee.objects.none()
+               
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer
     def get_queryset(self):
@@ -44,7 +39,6 @@ class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
         else:
             # Renvoyer tous les objets Bien si personne n'est connecté
             return DonneeCollectee.objects.all()
-        
 
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = DonneeCollectee.objects.all()
@@ -77,3 +71,17 @@ class CanalListView(generics.ListCreateAPIView):
 class SiteListView(generics.ListCreateAPIView):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
+
+class CommuneL(generics.ListCreateAPIView):
+    queryset = Commune.objects.all()
+    serializer_class = CommuneSerializers
+
+class CommuneDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Commune.objects.all()
+    serializer_class = CommuneSerializers
+
+class CommuneApp(generics.ListAPIView):
+    queryset = Commune.objects.all()
+    serializer_class = CommuneSerializersApp
+
+

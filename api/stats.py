@@ -175,29 +175,54 @@ class TotalCollectedDataView(APIView):
         #     }
 
         # Agrégations par commune
-        communes_aggregations = {}
-        communes = DonneeCollectee.objects.values('commune').distinct()
-        for commune_data in communes:
-            commune = commune_data['commune']
-            commune_aggregations = {}
-            for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
-                nombre_total_etat = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support).count()
-                montant_total_etat_tsp = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support).annotate(
-                    TSP_float=Cast('TSP', FloatField())
-                ).aggregate(Sum('TSP_float'))['TSP_float__sum'] or 0
-                montant_total_etat_odp = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support).annotate(
-                    ODP_value_float=Cast('ODP_value', FloatField())
-                ).aggregate(Sum('ODP_value_float'))['ODP_value_float__sum'] or 0
-                montant_total_etat = montant_total_etat_tsp + montant_total_etat_odp
+        if self.request.user.is_agent:
+            communes_aggregations = {}
+            communes = DonneeCollectee.objects.values('commune').distinct()
+            for commune_data in communes:
+                commune = commune_data['commune']
+                commune_aggregations = {}
+                for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
+                    nombre_total_etat = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support).count()
+                    montant_total_etat_tsp = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support).annotate(
+                        TSP_float=Cast('TSP', FloatField())
+                    ).aggregate(Sum('TSP_float'))['TSP_float__sum'] or 0
+                    montant_total_etat_odp = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support).annotate(
+                        ODP_value_float=Cast('ODP_value', FloatField())
+                    ).aggregate(Sum('ODP_value_float'))['ODP_value_float__sum'] or 0
+                    montant_total_etat = montant_total_etat_tsp + montant_total_etat_odp
 
-                commune_aggregations[etat_support] = {
-                    'nombre_total': nombre_total_etat,
-                    'montant_total_tsp': montant_total_etat_tsp,
-                    'montant_total_odp': montant_total_etat_odp,
-                    'montant_total': montant_total_etat,
-                }
+                    commune_aggregations[etat_support] = {
+                        'nombre_total': nombre_total_etat,
+                        'montant_total_tsp': montant_total_etat_tsp,
+                        'montant_total_odp': montant_total_etat_odp,
+                        'montant_total': montant_total_etat,
+                    }
 
-            communes_aggregations[commune] = commune_aggregations
+                communes_aggregations[commune] = commune_aggregations
+        else:
+            communes_aggregations = {}
+            communes = DonneeCollectee.objects.filter(entreprise=self.request.user.entreprise).values('commune').distinct()
+            for commune_data in communes:
+                commune = commune_data['commune']
+                commune_aggregations = {}
+                for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
+                    nombre_total_etat = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support,entreprise=self.request.user.entreprise).count()
+                    montant_total_etat_tsp = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support,entreprise=self.request.user.entreprise).annotate(
+                        TSP_float=Cast('TSP', FloatField())
+                    ).aggregate(Sum('TSP_float'))['TSP_float__sum'] or 0
+                    montant_total_etat_odp = DonneeCollectee.objects.filter(commune=commune, etat_support=etat_support,entreprise=self.request.user.entreprise).annotate(
+                        ODP_value_float=Cast('ODP_value', FloatField())
+                    ).aggregate(Sum('ODP_value_float'))['ODP_value_float__sum'] or 0
+                    montant_total_etat = montant_total_etat_tsp + montant_total_etat_odp
+
+                    commune_aggregations[etat_support] = {
+                        'nombre_total': nombre_total_etat,
+                        'montant_total_tsp': montant_total_etat_tsp,
+                        'montant_total_odp': montant_total_etat_odp,
+                        'montant_total': montant_total_etat,
+                    }
+
+                communes_aggregations[commune] = commune_aggregations
 
 
         return Response({

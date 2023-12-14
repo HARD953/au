@@ -5,8 +5,11 @@ from .statis2 import *
 from .marque1 import *
 
 urlpatterns = [
-    path('donneescollectees/', DonneeCollecteeListView.as_view(), name='donnee-collectee-list'),
-    path('collectedata/', DonneeCollecteeCreateView.as_view(), name='donnee-collectee-create'),
+    path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
+    path('collectedata/', DonneeCollecteeCreate.as_view(), name='donnee-collectee-create'),
+    path('commune/', CommuneL.as_view(), name='commune-collectee-create'),
+    path('commune/<int:pk>/', CommuneDetail.as_view(), name='commune-collectee-detail'),
+    path('communeapp/', CommuneApp.as_view(), name='commune-collectee-app'),
     path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('supports/', SupportPublicitaireListView.as_view(), name='support-publicitaire-list'),
     path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name='support-publicitaire-detail'),
@@ -15,14 +18,12 @@ urlpatterns = [
     path('canal/', CanalListView.as_view(), name='canal'),
     path('marque/', MarqueListView.as_view(), name='marque'),
     path('site/', SiteListView.as_view(), name='site'),
-    path('tauxTSP/<int:pk>/', TauxTSPCreateView.as_view(), name='TSP'),
-    path('tauxODP/<int:pk>/', TauxODPCreateView.as_view(), name='ODP'),
 
     # Statistiques générales
     path('gcollecte/', GTotalCollectedDataView.as_view(), name='general-statistics'),
     path('collecte/', TotalCollectedDataView.as_view(), name='statistics-etat'),
     path('collectem/', GTotalCollectedDataViewM.as_view(), name='statistics-marque'),
-    # # Statistiques par emplacement géographique
+    # Statistiques par emplacement géographique
     # path('api/statistiques/geographique/', AverageSurfaceView.as_view(), name='geographical-statistics'),
     # # Statistiques par type de support publicitaire
     # path('api/statistiques/support-publicitaire/', AverageDurationView.as_view(), name='support-statistics'),

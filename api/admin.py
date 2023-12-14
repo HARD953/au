@@ -9,4 +9,5 @@ admin.site.register(Canal)
 admin.site.register(Marque)
 admin.site.register(Visibilite)
 admin.site.register(Etat)
+admin.site.register(Commune)
 

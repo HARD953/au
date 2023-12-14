@@ -15,5 +15,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/blacklist/', BlacklistTokenUpdateView.as_view(),
          name='blacklist'),
+    
     # ... Autres URL pour d'autres vues si nécessaire
 ]
