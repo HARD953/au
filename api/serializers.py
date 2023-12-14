@@ -6,6 +6,11 @@ class DonneeCollecteeSerializer(serializers.ModelSerializer):
         model = DonneeCollectee
         fields = '__all__'
 
+class EntrepriseSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = DonneeCollectee
+        fields = ["entreprise"]
+
 class CommuneSerializers(serializers.ModelSerializer):
     class Meta:
         model = Commune
