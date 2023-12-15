@@ -10,14 +10,14 @@ from custumer.serializers import UserSerializer1
 
 class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
-    serializer_class = DonneeCollecteeSerializer
-    permission_classes = [IsAuthenticated]
-    def perform_create(self, serializer):
-        # Associer l'utilisateur connecté comme propriétaire du Bien
-        if self.request.user.is_anonymous:
-            serializer.save()
-        else:
-            serializer.save(agent=self.request.user)
+    serializer_class = DonneeCollecteeSerializer1
+    # permission_classes = [IsAuthenticated]
+    # def perform_create(self, serializer):
+    #     # Associer l'utilisateur connecté comme propriétaire du Bien
+    #     if self.request.user.is_anonymous:
+    #         serializer.save()
+    #     else:
+    #         serializer.save(agent=self.request.user)
 
 class DonneeCollecteeList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -25,10 +25,10 @@ class DonneeCollecteeList(generics.ListAPIView):
     def get_queryset(self):
         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
         user = self.request.user
-        if user.is_user:  # Vérifie si l'utilisateur est connecté
-            return DonneeCollectee.objects.filter(entreprise=user.entreprise)
+        if user.is_agent:  # Vérifie si l'utilisateur est connecté
+            return DonneeCollectee.objects.all()
         else:
-            return DonneeCollectee.objects.none()
+            return DonneeCollectee.objects.filter(entreprise=user.entreprise)
                
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer

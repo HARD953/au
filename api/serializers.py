@@ -6,6 +6,11 @@ class DonneeCollecteeSerializer(serializers.ModelSerializer):
         model = DonneeCollectee
         fields = '__all__'
 
+class DonneeCollecteeSerializer1(serializers.ModelSerializer):
+    class Meta:
+        model = DonneeCollectee
+        exclude=["agent"]
+
 class EntrepriseSerializers(serializers.ModelSerializer):
     class Meta:
         model = DonneeCollectee

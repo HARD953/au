@@ -46,7 +46,7 @@ class Commune(models.Model):
         return self.commune
 
 class DonneeCollectee(models.Model):
-    agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
     entreprise = models.CharField(max_length=50, blank=True)
     Marque = models.CharField(max_length=50, blank=True)
     commune = models.CharField(max_length=50, blank=True)  # Utilise ForeignKey pour lier à la table Commune

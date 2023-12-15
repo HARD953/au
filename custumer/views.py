@@ -30,6 +30,14 @@ class UserListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
+        user = self.request.user
+        if user.is_agent:  # Vérifie si l'utilisateur est connecté
+            return CustomUser.objects.all()
+        else:
+            return CustomUser.objects.filter(entreprise=user.entreprise)
+
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
