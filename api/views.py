@@ -7,6 +7,9 @@ from .models import *
 from .serializers import *
 from custumer.models import*
 from custumer.serializers import UserSerializer1
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
 
 class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
@@ -39,6 +42,22 @@ class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
         else:
             # Renvoyer tous les objets Bien si personne n'est connecté
             return DonneeCollectee.objects.all()
+        
+class NombreSupportsParAgent(APIView):
+    def get(self, request):
+        # Vérifiez si l'utilisateur est authentifié
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication credentials were not provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Obtenez le nombre de supports collectés par agent
+        supports_par_agent = DonneeCollectee.objects.filter(agent=request.user).values('agent').annotate(nombre_supports=Count('id'))
+
+        # supports_par_agent est maintenant une liste de dictionnaires avec 'agent' et 'nombre_supports'
+        for entry in supports_par_agent:
+            agent = entry['agent']
+            nombre_supports = entry['nombre_supports']
+            return Response({'agent': agent, 'nombre_supports': nombre_supports}, status=status.HTTP_200_OK)
+        
 
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = DonneeCollectee.objects.all()

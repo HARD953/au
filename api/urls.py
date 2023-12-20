@@ -6,6 +6,7 @@ from .marque1 import *
 
 urlpatterns = [
     path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
+    path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('collectedata/', DonneeCollecteeCreate.as_view(), name='donnee-collectee-create'),
     path('commune/', CommuneL.as_view(), name='commune-collectee-create'),
     path('commune/<int:pk>/', CommuneDetail.as_view(), name='commune-collectee-detail'),
