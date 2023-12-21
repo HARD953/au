@@ -14,6 +14,15 @@ from rest_framework import status
 class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer1
+    def perform_create(self, serializer):
+        # Appeler la méthode perform_create du parent pour effectuer la création
+        instance = serializer.save()
+        # Ajouter un message personnalisé
+        message = f"Donnée #{instance.id} pour {instance.type_support} a été créée avec succès."
+        # Vous pouvez également ajouter d'autres messages ou des détails supplémentaires
+        # Envoyer une réponse avec le message
+        return Response({'message': message}, status=status.HTTP_201_CREATED)
+    
     # permission_classes = [IsAuthenticated]
     # def perform_create(self, serializer):
     #     # Associer l'utilisateur connecté comme propriétaire du Bien
