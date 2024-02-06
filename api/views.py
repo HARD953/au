@@ -84,7 +84,15 @@ class MarqueListView(generics.ListCreateAPIView):
     queryset = Marque.objects.all()
     serializer_class = MarqueSerializer
 
+class MarqueListViewD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Marque.objects.all()
+    serializer_class = MarqueSerializer
+
 class VisibiliteListView(generics.ListCreateAPIView):
+    queryset = Visibilite.objects.all()
+    serializer_class = VisibiliteSerializer
+
+class VisibiliteListViewD(generics.RetrieveUpdateDestroyAPIView):
     queryset = Visibilite.objects.all()
     serializer_class = VisibiliteSerializer
 
@@ -92,11 +100,23 @@ class EtatListView(generics.ListCreateAPIView):
     queryset = Etat.objects.all()
     serializer_class = EtatSerializer
 
+class EtatListViewD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Etat.objects.all()
+    serializer_class = EtatSerializer
+
 class CanalListView(generics.ListCreateAPIView):
     queryset = Canal.objects.all()
     serializer_class = CanalSerializer
 
+class CanalListViewD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Canal.objects.all()
+    serializer_class = CanalSerializer
+
 class SiteListView(generics.ListCreateAPIView):
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer
+
+class SiteListViewD(generics.RetrieveUpdateDestroyAPIView):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
 

@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db import models
 from custumer.models import CustomUser
 from django.db.models.signals import pre_save
+from django.utils import timezone
 
 class SupportPublicitaire(models.Model):
     type_support = models.CharField(max_length=50)
@@ -14,26 +15,36 @@ class SupportPublicitaire(models.Model):
     
 class Marque(models.Model):
     marque = models.CharField(max_length=50)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.marque
     
 class Canal(models.Model):
     canal = models.CharField(max_length=50)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.canal
     
 class Site(models.Model):
     site = models.CharField(max_length=50)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.site
     
 class Etat(models.Model):
     etat = models.CharField(max_length=50)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.etat
     
 class Visibilite(models.Model):
     visibilite = models.CharField(max_length=50)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.visibilite
 
@@ -41,6 +52,8 @@ class Commune(models.Model):
     commune = models.CharField(max_length=50,default="Abidjan")
     tauxODP = models.CharField(max_length=50,default="6")
     tauxTSP = models.CharField(max_length=50,default="7")
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.commune
