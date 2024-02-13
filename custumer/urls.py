@@ -8,7 +8,9 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path('users/', UserListCreateView.as_view(), name='user-list-create'),  # Liste et création d'utilisateurs
+    path('uagent/', UserListCreateViewAgent.as_view(), name='user-lista-create'),  # Liste et création d'utilisateurs
+    path('uentreprise/', UserListCreateViewEntreprise.as_view(), name='user-liste-create'),  # Liste et création d'utilisateurs
+    path('urecenseur/', UserListCreateViewRecenseur.as_view(), name='user-listr-create'),  # Liste et création d'utilisateurs
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),  # Détails, mise à jour et suppression d'un utilisateur
     path('detailadimn/', DetailConecter.as_view(),name='detail-des-admin'),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),

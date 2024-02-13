@@ -26,17 +26,39 @@ class DetailConecter(APIView):
         else:
             return Response({'status':status.HTTP_400_BAD_REQUEST})
 
-class UserListCreateView(generics.ListCreateAPIView):
+# class UserListCreateView(generics.ListCreateAPIView):
+#     queryset = CustomUser.objects.all()
+#     serializer_class = UserSerializer
+
+#     def get_queryset(self):
+#         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
+#         user = self.request.user
+#         if user.is_agent:  # Vérifie si l'utilisateur est connecté
+#             return CustomUser.objects.all()
+#         else:
+#             return CustomUser.objects.filter(entreprise=user.entreprise)
+        
+class UserListCreateViewAgent(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
-        user = self.request.user
-        if user.is_agent:  # Vérifie si l'utilisateur est connecté
-            return CustomUser.objects.all()
-        else:
-            return CustomUser.objects.filter(entreprise=user.entreprise)
+        return CustomUser.objects.filter(is_agent=True)
+    
+class UserListCreateViewEntreprise(generics.ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return CustomUser.objects.filter(is_entreprise=True)
+
+class UserListCreateViewRecenseur(generics.ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return CustomUser.objects.filter(is_recenseur=True)
+
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()

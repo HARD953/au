@@ -7,17 +7,17 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         return obj.owner == request.user
  
-class IsSuperAdminAuthenticated(BasePermission):
+class IsLanfia(BasePermission):
     def has_permission(self, request, view):
     # Ne donnons l’accès qu’aux utilisateurs  Superadministrateurs authentifiés
-        return bool(request.user and request.user.is_authenticated and request.user.is_superuser and request.user.is_active and request.user.is_staff)
+        return bool(request.user and request.user.is_authenticated and request.user.is_agent and request.user.is_active)
 
-class IsAdminAuthenticated(BasePermission):
+class IsEntreprise(BasePermission):
     def has_permission(self, request, view):
     # Ne donnons l’accès qu’aux utilisateurs administrateurs authentifiés
-        return bool(request.user and request.user.is_authenticated and request.user.is_user  and request.user.is_active and request.user.is_staff)
+        return bool(request.user and request.user.is_authenticated and request.user.is_entreprise  and request.user.is_active)
 
-class IsAgentAuthenticated(BasePermission):
+class IsAgentRecenseur(BasePermission):
     def has_permission(self, request, view):
     # Ne donnons l’accès qu’aux utilisateurs administrateurs authentifiés
-        return bool(request.user and request.user.is_authenticated and request.user.is_agent or request.user.is_superuser and request.user.is_active and request.user.is_staff)
+        return bool(request.user and request.user.is_authenticated and request.user.is_recenseur and request.user.is_active)

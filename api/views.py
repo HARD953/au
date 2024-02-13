@@ -10,29 +10,22 @@ from custumer.serializers import UserSerializer1
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from .permissions import *
 
 class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer1
-    def perform_create(self, serializer):
-        # Appeler la méthode perform_create du parent pour effectuer la création
-        instance = serializer.save()
-        # Ajouter un message personnalisé
-        message = f"Donnée #{instance.id} pour {instance.type_support} a été créée avec succès."
-        # Vous pouvez également ajouter d'autres messages ou des détails supplémentaires
-        # Envoyer une réponse avec le message
-        return Response({'message': message}, status=status.HTTP_201_CREATED)
     
-    # permission_classes = [IsAuthenticated]
-    # def perform_create(self, serializer):
-    #     # Associer l'utilisateur connecté comme propriétaire du Bien
-    #     if self.request.user.is_anonymous:
-    #         serializer.save()
-    #     else:
-    #         serializer.save(agent=self.request.user)
+    permission_classes = [IsAuthenticated]
+    def perform_create(self, serializer):
+        # Associer l'utilisateur connecté comme propriétaire du Bien
+        if self.request.user.is_anonymous:
+            serializer.save()
+        else:
+            serializer.save(agent=self.request.user)
 
 class DonneeCollecteeList(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated] 
     serializer_class = DonneeCollecteeSerializer# Assurez-vous que l'utilisateur est authentifié
     def get_queryset(self):
         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
@@ -41,7 +34,7 @@ class DonneeCollecteeList(generics.ListAPIView):
             return DonneeCollectee.objects.all()
         else:
             return DonneeCollectee.objects.filter(entreprise=user.entreprise)
-               
+                       
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer
     def get_queryset(self):

@@ -9,7 +9,7 @@ class DonneeCollecteeSerializer(serializers.ModelSerializer):
 class DonneeCollecteeSerializer1(serializers.ModelSerializer):
     class Meta:
         model = DonneeCollectee
-        exclude=["agent"]
+        fields = '__all__'
 
 class EntrepriseSerializers(serializers.ModelSerializer):
     class Meta:

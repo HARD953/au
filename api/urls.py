@@ -3,6 +3,7 @@ from .views import *
 from .stats import *
 from .statis2 import *
 from .marque1 import *
+from .statagent import *
 
 urlpatterns = [
     path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
@@ -26,8 +27,9 @@ urlpatterns = [
     path('supports/', SupportPublicitaireListView.as_view(), name='support-publicitaire-list'),
     path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name='support-publicitaire-detail'),
     
-
-    # Statistiques générales
+    # # Statistiques générales
+    path('statagent/', StatsByAgent.as_view(), name='general-agent'),
+    path('statagent/<int:agent_id>/', StatsByAgent.as_view(), name='general-agents'),
     path('gcollecte/', GTotalCollectedDataView.as_view(), name='general-statistics'),
     path('collecte/', TotalCollectedDataView.as_view(), name='statistics-etat'),
     path('collectem/', GTotalCollectedDataViewM.as_view(), name='statistics-marque'),

@@ -78,6 +78,8 @@ class DonneeCollectee(models.Model):
     TSP = models.CharField(max_length=50, default=12, blank=True)
     ODP = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50, default=1, blank=True)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
 
