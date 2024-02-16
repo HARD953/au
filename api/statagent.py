@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Sum, Count, Avg
-from django.db.models.functions import Cast, TruncDate
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncDate, Cast
 from django.db.models import FloatField
 from .models import DonneeCollectee
 from custumer.models import CustomUser
@@ -19,8 +19,8 @@ class StatsByAgent(APIView):
         # Définir les annotations communes pour éviter les répétitions
         annotate_stats = lambda queryset: queryset.annotate(
             total=Count('id'),
-            total_tsp=Sum('TSP'),
-            total_odp=Sum('ODP_value'),
+            total_tsp=Sum(Cast('TSP', output_field=FloatField())),
+            total_odp=Sum(Cast('ODP_value', output_field=FloatField())),
             date=TruncDate('create')
         ).order_by('date')
 
