@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .permissions import *
+from datetime import datetime
 
 class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
@@ -32,9 +33,21 @@ class DonneeCollecteeList(generics.ListAPIView):
         user = self.request.user
         if user.is_agent:  # Vérifie si l'utilisateur est connecté
             return DonneeCollectee.objects.all()
+        elif user.is_recenseur:
+            current_date = datetime.now().date()
+            return DonneeCollectee.objects.filter(agent=user,create__date=current_date)
         else:
             return DonneeCollectee.objects.filter(entreprise=user.entreprise)
-                       
+        
+class Allcollecte(generics.ListAPIView):
+    permission_classes = [IsAuthenticated] 
+    serializer_class = DonneeCollecteeSerializer# Assurez-vous que l'utilisateur est authentifié
+    def get_queryset(self):
+        # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
+        user = self.request.user
+        return DonneeCollectee.objects.filter(agent=user)
+
+           
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer
     def get_queryset(self):

@@ -80,8 +80,8 @@ class DonneeCollectee(models.Model):
     ODP_value = models.CharField(max_length=50, default=1, blank=True)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True)
+    longitude = models.FloatField(blank=True)
 
     def save(self, *args, **kwargs):
         # Récupérer les taux en fonction de la commune

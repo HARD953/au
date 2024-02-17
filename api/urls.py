@@ -4,9 +4,12 @@ from .stats import *
 from .statis2 import *
 from .marque1 import *
 from .statagent import *
+from .etatsupport import *
 
 urlpatterns = [
     path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
+    path('statbyetat/', StatByEtat.as_view(), name='stat-collectee-list'),
+    path('all/', Allcollecte.as_view(), name='all-collectee-list'),
     path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('collectedata/', DonneeCollecteeCreate.as_view(), name='donnee-collectee-create'),
