@@ -51,12 +51,7 @@ class Allcollecte(generics.ListAPIView):
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            # Filtrer les objets Bien pour l'utilisateur connecté
-            return DonneeCollectee.objects.filter(agent=self.request.user)
-        else:
-            # Renvoyer tous les objets Bien si personne n'est connecté
-            return DonneeCollectee.objects.all()
+        return DonneeCollectee.objects.all()
         
 class NombreSupportsParAgent(APIView):
     def get(self, request):

@@ -267,8 +267,8 @@ class GTotalCollectedDataView(APIView):
         )
 
         return Response({
-            'aggregated_data': aggregated_data,
             'total_aggregated_data': total_aggregated_data,
+            'aggregated_data': aggregated_data,
             'montants_bon': montants_bon,
             'montants_defraichis': montants_defraichis,
             'montants_deteriore': montants_deteriore,
