@@ -32,10 +32,10 @@ urlpatterns = [
     
     # # Statistiques générales
     path('statagent/', StatsByAgent.as_view(), name='general-agent'),
-    path('statagent/<int:agent_id>/', StatsByAgent.as_view(), name='general-agents'),
-    path('gcollecte/', GTotalCollectedDataView.as_view(), name='general-statistics'),
-    path('collecte/', TotalCollectedDataView.as_view(), name='statistics-etat'),
-    path('collectem/', GTotalCollectedDataViewM.as_view(), name='statistics-marque'),
+    path('statagent1/<int:agent_id>/', StatsByAgent.as_view(), name='general-agents'),
+    path('gcollecte/<str:start_date>/<str:end_date>/', GTotalCollectedDataView.as_view(), name='general-statistics'),
+    path('collecte/<str:start_date>/<str:end_date>/', TotalCollectedDataView.as_view(), name='statistics-etat'),
+    path('collectem/<str:start_date>/<str:end_date>/', GTotalCollectedDataViewM.as_view(), name='statistics-marque'),
     # Statistiques par emplacement géographique
     # path('api/statistiques/geographique/', AverageSurfaceView.as_view(), name='geographical-statistics'),
     # # Statistiques par type de support publicitaire

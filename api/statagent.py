@@ -10,7 +10,7 @@ from custumer.models import CustomUser
 class StatsByAgent(APIView):
     def get(self, request, agent_id=None):
         # Sélectionner les statistiques pour tous les agents ou un agent spécifique
-        agents_filter = {'agent_id': agent_id} if agent_id else {}
+        agents_filter = {'id': agent_id} if agent_id else {}
         agents = CustomUser.objects.filter(**agents_filter).values('id').distinct()
 
         # Initialiser un dictionnaire pour stocker les statistiques par agent

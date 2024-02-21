@@ -192,15 +192,33 @@ from .models import DonneeCollectee
 #             'montants_deteriore': montants_deteriore,
 #         }, status=status.HTTP_200_OK)
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.db.models import Count, Sum
-from django.db.models.functions import TruncDate
-from django.db.models import FloatField, F
+from django.db.models.functions import TruncDate, Cast
+from django.db.models import FloatField
+from .models import DonneeCollectee
+from datetime import datetime
 
 class GTotalCollectedDataView(APIView):
-    def get(self, request):
-        # Agrégations générales par date
+    def get(self, request, start_date=None, end_date=None):
+        # Convertir les dates en objets date si elles sont fournies
+        if start_date:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        if end_date:
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
+        # Définir les filtres de date en fonction des paramètres fournis
+        date_filters = {}
+        if start_date:
+            date_filters['create__date__gte'] = start_date
+        if end_date:
+            date_filters['create__date__lte'] = end_date
+
+        # Agrégations générales par date avec les filtres de date
         if self.request.user.is_agent:
-            aggregated_data = DonneeCollectee.objects.annotate(
+            aggregated_data = DonneeCollectee.objects.filter(**date_filters).annotate(
                 date=TruncDate('create')
             ).values('date').annotate(
                 nombre_total=Count('id'),
@@ -209,10 +227,10 @@ class GTotalCollectedDataView(APIView):
                 montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField()))
             )
 
-            # Agrégations par état_support par date
+            # Agrégations par état_support par date avec les filtres de date
             def get_montants(etat_support):
                 montants_etat = DonneeCollectee.objects.filter(
-                    etat_support=etat_support
+                    etat_support=etat_support, **date_filters
                 ).annotate(
                     date=TruncDate('create')
                 ).values('date').annotate(
@@ -229,7 +247,7 @@ class GTotalCollectedDataView(APIView):
 
         else:
             aggregated_data = DonneeCollectee.objects.filter(
-                entreprise=self.request.user.entreprise
+                entreprise=self.request.user.entreprise, **date_filters
             ).annotate(
                 date=TruncDate('create')
             ).values('date').annotate(
@@ -239,11 +257,10 @@ class GTotalCollectedDataView(APIView):
                 montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField()))
             )
 
-            # Agrégations par état_support par date
+            # Agrégations par état_support par date avec les filtres de date
             def get_montants(etat_support):
                 montants_etat = DonneeCollectee.objects.filter(
-                    etat_support=etat_support,
-                    entreprise=self.request.user.entreprise
+                    etat_support=etat_support, entreprise=self.request.user.entreprise, **date_filters
                 ).annotate(
                     date=TruncDate('create')
                 ).values('date').annotate(
@@ -273,3 +290,5 @@ class GTotalCollectedDataView(APIView):
             'montants_defraichis': montants_defraichis,
             'montants_deteriore': montants_deteriore,
         }, status=status.HTTP_200_OK)
+
+
