@@ -39,6 +39,14 @@ class DonneeCollecteeList(generics.ListAPIView):
         else:
             return DonneeCollectee.objects.filter(entreprise=user.entreprise)
         
+class DonneeCollecteeListAll(generics.ListAPIView):
+    permission_classes = [IsAuthenticated] 
+    serializer_class = DonneeCollecteeSerializer# Assurez-vous que l'utilisateur est authentifié
+    def get_queryset(self):
+        # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
+        user = self.request.user
+        return DonneeCollectee.objects.filter(agent=user)
+
 class Allcollecte(generics.ListAPIView):
     permission_classes = [IsAuthenticated] 
     serializer_class = DonneeCollecteeSerializer# Assurez-vous que l'utilisateur est authentifié
