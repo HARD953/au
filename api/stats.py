@@ -1,14 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Count, Avg, Sum
-from django.db.models.functions import TruncMonth
-from django.db.models import Max, FloatField
-from django.db.models.functions import Cast
-from .models import DonneeCollectee
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
-from django.db.models import FloatField, F
+from django.db.models import FloatField
+from django.db.models.functions import Cast
 from .models import DonneeCollectee
 from datetime import datetime
 
@@ -45,7 +41,35 @@ class TotalCollectedDataView(APIView):
                         montant_total_odp=Sum(Cast('ODP_value', FloatField())),
                         montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField()))
                     )
-                    commune_aggregations[etat_support] = commune_etat_aggregations
+
+                    # Ajouter la somme des montants pour chaque état
+                    somme_montant_total_tsp = sum(item['montant_total_tsp'] for item in commune_etat_aggregations)
+                    somme_montant_total_odp = sum(item['montant_total_odp'] for item in commune_etat_aggregations)
+                    somme_montant_total = sum(item['montant_total'] for item in commune_etat_aggregations)
+
+                    commune_aggregations[etat_support] = {
+                        'somme_montant_total_tsp': somme_montant_total_tsp,
+                        'somme_montant_total_odp': somme_montant_total_odp,
+                        'somme_montant_total': somme_montant_total,
+                        'nombre_total': sum(item['nombre_total'] for item in commune_etat_aggregations),
+                    }
+
+                # Ajouter une agrégation pour la somme totale sans distinction des états
+                commune_total_aggregation = DonneeCollectee.objects.filter(
+                    commune=commune, **date_filters
+                ).aggregate(
+                    somme_montant_total_tsp=Sum(Cast('TSP', FloatField())),
+                    somme_montant_total_odp=Sum(Cast('ODP_value', FloatField())),
+                    somme_montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField())),
+                    nombre_total=Count('id'),
+                )
+
+                commune_aggregations['Total'] = {
+                    'somme_montant_total_tsp': commune_total_aggregation['somme_montant_total_tsp'] or 0,
+                    'somme_montant_total_odp': commune_total_aggregation['somme_montant_total_odp'] or 0,
+                    'somme_montant_total': commune_total_aggregation['somme_montant_total'] or 0,
+                    'nombre_total': commune_total_aggregation['nombre_total'] or 0,
+                }
 
                 communes_aggregations[commune] = commune_aggregations
         else:
@@ -68,7 +92,35 @@ class TotalCollectedDataView(APIView):
                         montant_total_odp=Sum(Cast('ODP_value', FloatField())),
                         montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField()))
                     )
-                    commune_aggregations[etat_support] = commune_etat_aggregations
+
+                    # Ajouter la somme des montants pour chaque état
+                    somme_montant_total_tsp = sum(item['montant_total_tsp'] for item in commune_etat_aggregations)
+                    somme_montant_total_odp = sum(item['montant_total_odp'] for item in commune_etat_aggregations)
+                    somme_montant_total = sum(item['montant_total'] for item in commune_etat_aggregations)
+
+                    commune_aggregations[etat_support] = {
+                        'somme_montant_total_tsp': somme_montant_total_tsp,
+                        'somme_montant_total_odp': somme_montant_total_odp,
+                        'somme_montant_total': somme_montant_total,
+                        'nombre_total': sum(item['nombre_total'] for item in commune_etat_aggregations),
+                    }
+
+                # Ajouter une agrégation pour la somme totale sans distinction des états
+                commune_total_aggregation = DonneeCollectee.objects.filter(
+                    commune=commune, entreprise=self.request.user.entreprise, **date_filters
+                ).aggregate(
+                    somme_montant_total_tsp=Sum(Cast('TSP', FloatField())),
+                    somme_montant_total_odp=Sum(Cast('ODP_value', FloatField())),
+                    somme_montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField())),
+                    nombre_total=Count('id'),
+                )
+
+                commune_aggregations['Total'] = {
+                    'somme_montant_total_tsp': commune_total_aggregation['somme_montant_total_tsp'] or 0,
+                    'somme_montant_total_odp': commune_total_aggregation['somme_montant_total_odp'] or 0,
+                    'somme_montant_total': commune_total_aggregation['somme_montant_total'] or 0,
+                    'nombre_total': commune_total_aggregation['nombre_total'] or 0,
+                }
 
                 communes_aggregations[commune] = commune_aggregations
 
