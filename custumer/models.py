@@ -39,6 +39,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_agent = models.BooleanField(default=True)
     is_entreprise = models.BooleanField(default=True)
     is_recenseur = models.BooleanField(default=False)
+    is_lanfia = models.BooleanField(default=True)
     is_user = models.BooleanField(default=False)
     last_login = models.DateTimeField(default=timezone.now())
     district = models.CharField(max_length=100, blank=False)

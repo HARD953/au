@@ -1,54 +1,87 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Sum, Count
-from django.db.models.functions import TruncDate, Cast
+from django.db.models import Count, Sum
+from django.db.models.functions import TruncDate
 from django.db.models import FloatField
+from django.db.models.functions import Cast
 from .models import DonneeCollectee
+from datetime import datetime
 from custumer.models import CustomUser
 
 class StatsByAgent(APIView):
-    def get(self, request, agent_id=None):
-        # Sélectionner les statistiques pour tous les agents ou un agent spécifique
-        agents_filter = {'id': agent_id} if agent_id else {}
-        agents = CustomUser.objects.filter(**agents_filter).values('id').distinct()
+    def get(self, request, agent_id=None, start_date=None, end_date=None):
+        # Convertir les dates en objets date si elles sont fournies
+        if start_date:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        if end_date:
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
 
-        # Initialiser un dictionnaire pour stocker les statistiques par agent
-        stats_by_agent = {}
+        # Définir les filtres de date en fonction des paramètres fournis
+        date_filters = {}
+        if start_date:
+            date_filters['create__date__gte'] = start_date
+        if end_date:
+            date_filters['create__date__lte'] = end_date
 
-        # Définir les annotations communes pour éviter les répétitions
-        annotate_stats = lambda queryset: queryset.annotate(
-            total=Count('id'),
-            total_tsp=Sum(Cast('TSP', output_field=FloatField())),
-            total_odp=Sum(Cast('ODP_value', output_field=FloatField())),
-            date=TruncDate('create')
-        ).order_by('date')
+        # Filtrer les utilisateurs en fonction de l'ID de l'agent
+        utilisateurs_filter = {'id': agent_id} if agent_id else {}
 
-        # Parcourir chaque agent et calculer les statistiques
-        for agent_data in agents:
-            agent_id = agent_data['id']
-            agent_stats = {}
+        # Agrégations par utilisateur
+        utilisateurs_aggregations = {}
+        utilisateurs = CustomUser.objects.filter(**utilisateurs_filter).values('id').distinct()
 
-            # Statistiques par commune, entreprise, marque, état et date pour cet agent
-            agent_stats['Commune'] = annotate_stats(
-                DonneeCollectee.objects.filter(agent=agent_id).values('commune')
-            )
+        for utilisateur_data in utilisateurs:
+            utilisateur_id = utilisateur_data['id']
+            utilisateur_aggregations = {}
 
-            agent_stats['Commune_entreprise'] = annotate_stats(
-                DonneeCollectee.objects.filter(agent=agent_id).values('commune', 'entreprise')
-            )
+            # Agrégations par commune
+            communes_aggregations = {}
+            communes = DonneeCollectee.objects.filter(agent=utilisateur_id, **date_filters).values('commune').distinct()
 
-            agent_stats['Commune_marque'] = annotate_stats(
-                DonneeCollectee.objects.filter(agent=agent_id).values('commune', 'Marque')
-            )
+            for commune_data in communes:
+                commune = commune_data['commune']
+                commune_aggregations = {}
 
-            agent_stats['Commune_etat'] = annotate_stats(
-                DonneeCollectee.objects.filter(agent=agent_id).values('commune', 'etat_support')
-            )
+                # Agrégations par entreprise
+                entreprises_aggregations = {}
+                entreprises = DonneeCollectee.objects.filter(agent=utilisateur_id, commune=commune, **date_filters).values('entreprise').distinct()
 
-            # Autres statistiques peuvent être ajoutées ici
-            # Stocker les statistiques dans le dictionnaire global
-            stats_by_agent[agent_id] = agent_stats
+                for entreprise_data in entreprises:
+                    entreprise = entreprise_data['entreprise']
+                    entreprise_aggregations = {}
 
-        # Retourner les statistiques par agent
-        return Response(stats_by_agent, status=status.HTTP_200_OK)
+                    # Agrégations par état
+                    for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
+                        etat_aggregations = DonneeCollectee.objects.filter(
+                            agent=utilisateur_id, commune=commune, entreprise=entreprise, etat_support=etat_support, **date_filters
+                        ).annotate(
+                            date=TruncDate('create')
+                        ).values('date').annotate(
+                            nombre_total=Count('id'),
+                            montant_total_tsp=Sum(Cast('TSP', FloatField())),
+                            montant_total_odp=Sum(Cast('ODP_value', FloatField())),
+                            montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField()))
+                        )
+
+                        # Ajouter la somme des montants pour chaque état
+                        somme_montant_total_tsp = sum(item['montant_total_tsp'] for item in etat_aggregations)
+                        somme_montant_total_odp = sum(item['montant_total_odp'] for item in etat_aggregations)
+                        somme_montant_total = sum(item['montant_total'] for item in etat_aggregations)
+
+                        entreprise_aggregations[etat_support] = {
+                            'somme_montant_total_tsp': somme_montant_total_tsp,
+                            'somme_montant_total_odp': somme_montant_total_odp,
+                            'somme_montant_total': somme_montant_total,
+                            'nombre_total': sum(item['nombre_total'] for item in etat_aggregations),
+                        }
+
+                    entreprises_aggregations[entreprise] = entreprise_aggregations
+
+                communes_aggregations[commune] = entreprises_aggregations
+
+            utilisateurs_aggregations[utilisateur_id] = communes_aggregations
+
+        return Response({
+            'utilisateurs_aggregations': utilisateurs_aggregations,
+        }, status=status.HTTP_200_OK)

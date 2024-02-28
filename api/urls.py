@@ -13,7 +13,6 @@ urlpatterns = [
     path('statbyetatall/', StatByEtatAll.as_view(), name='stat-collectee-list'),
     path('all/', Allcollecte.as_view(), name='all-collectee-list'),
     path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
-    path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('collectedata/', DonneeCollecteeCreate.as_view(), name='donnee-collectee-create'),
     path('commune/', CommuneL.as_view(), name='commune-collectee-create'),
     path('commune/<int:pk>/', CommuneDetail.as_view(), name='commune-collectee-detail'),
@@ -33,8 +32,8 @@ urlpatterns = [
     path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name='support-publicitaire-detail'),
     
     # # Statistiques générales
-    path('statagent/', StatsByAgent.as_view(), name='general-agent'),
-    path('statagent1/<int:agent_id>/', StatsByAgent.as_view(), name='general-agents'),
+    path('statagent/<str:start_date>/<str:end_date>/', StatsByAgent.as_view(), name='general-agent'),
+    path('statagent1/<str:start_date>/<str:end_date>/<int:agent_id>/', StatsByAgent.as_view(), name='general-agents'),
     path('gcollecte/<str:start_date>/<str:end_date>/', GTotalCollectedDataView.as_view(), name='general-statistics'),
     path('collecte/<str:start_date>/<str:end_date>/', TotalCollectedDataView.as_view(), name='statistics-etat'),
     path('collectem/<str:start_date>/<str:end_date>/', GTotalCollectedDataViewM.as_view(), name='statistics-marque'),
