@@ -24,24 +24,25 @@ class GTotalCollectedDataViewM(APIView):
             date_filters['create__date__lte'] = end_date
 
         # Agrégations par entreprise
-        entreprises_aggregations = {}
+        entreprises_aggregations = []
+
         if self.request.user.is_agent:
             entreprises = DonneeCollectee.objects.filter(**date_filters).values('entreprise').distinct()
             for entreprise_data in entreprises:
                 entreprise = entreprise_data['entreprise']
-                entreprises_aggregations[entreprise] = {'communes': []}
+                entreprise_entry = {'entreprise': entreprise, 'communes': []}
 
                 # Agrégations par commune
                 communes = DonneeCollectee.objects.filter(entreprise=entreprise, **date_filters).values('commune').distinct()
                 for commune_data in communes:
                     commune = commune_data['commune']
-                    commune_aggregations = {'commune': commune, 'marques': []}
+                    commune_entry = {'commune': commune, 'marques': []}
 
                     # Agrégations par marque
                     marques = DonneeCollectee.objects.filter(entreprise=entreprise, commune=commune, **date_filters).values('Marque').distinct()
                     for marque_data in marques:
                         marque = marque_data['Marque']
-                        marque_aggregations = {'marque': marque, 'etat': {}}
+                        marque_entry = {'marque': marque, 'etat': {}}
 
                         # Agrégations par état
                         for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
@@ -54,34 +55,36 @@ class GTotalCollectedDataViewM(APIView):
                                 nombre_total=Count('id'),
                             )
 
-                            marque_aggregations['etat'][etat_support] = {
+                            marque_entry['etat'][etat_support] = {
                                 'somme_montant_total_tsp': etat_aggregations['somme_montant_total_tsp'] or 0,
                                 'somme_montant_total_odp': etat_aggregations['somme_montant_total_odp'] or 0,
                                 'somme_montant_total': etat_aggregations['somme_montant_total'] or 0,
                                 'nombre_total': etat_aggregations['nombre_total'] or 0,
                             }
 
-                        commune_aggregations['marques'].append(marque_aggregations)
+                        commune_entry['marques'].append(marque_entry)
 
-                    entreprises_aggregations[entreprise]['communes'].append(commune_aggregations)
-            
+                    entreprise_entry['communes'].append(commune_entry)
+
+                entreprises_aggregations.append(entreprise_entry)
+
         else:
-            entreprises = DonneeCollectee.objects.filter(entreprise=self.request.user.entreprise,**date_filters).values('entreprise').distinct()
+            entreprises = DonneeCollectee.objects.filter(entreprise=self.request.user.entreprise, **date_filters).values('entreprise').distinct()
             for entreprise_data in entreprises:
                 entreprise = entreprise_data['entreprise']
-                entreprises_aggregations[entreprise] = {'communes': []}
+                entreprise_entry = {'entreprise': entreprise, 'communes': []}
 
                 # Agrégations par commune
                 communes = DonneeCollectee.objects.filter(entreprise=entreprise, **date_filters).values('commune').distinct()
                 for commune_data in communes:
                     commune = commune_data['commune']
-                    commune_aggregations = {'commune': commune, 'marques': []}
+                    commune_entry = {'commune': commune, 'marques': []}
 
                     # Agrégations par marque
                     marques = DonneeCollectee.objects.filter(entreprise=entreprise, commune=commune, **date_filters).values('Marque').distinct()
                     for marque_data in marques:
                         marque = marque_data['Marque']
-                        marque_aggregations = {'marque': marque, 'etat': {}}
+                        marque_entry = {'marque': marque, 'etat': {}}
 
                         # Agrégations par état
                         for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
@@ -94,17 +97,17 @@ class GTotalCollectedDataViewM(APIView):
                                 nombre_total=Count('id'),
                             )
 
-                            marque_aggregations['etat'][etat_support] = {
+                            marque_entry['etat'][etat_support] = {
                                 'somme_montant_total_tsp': etat_aggregations['somme_montant_total_tsp'] or 0,
                                 'somme_montant_total_odp': etat_aggregations['somme_montant_total_odp'] or 0,
                                 'somme_montant_total': etat_aggregations['somme_montant_total'] or 0,
                                 'nombre_total': etat_aggregations['nombre_total'] or 0,
                             }
 
-                        commune_aggregations['marques'].append(marque_aggregations)
+                        commune_entry['marques'].append(marque_entry)
 
-                    entreprises_aggregations[entreprise]['communes'].append(commune_aggregations)
-            
-        return Response({
-            'entreprises_aggregations': entreprises_aggregations,
-        }, status=status.HTTP_200_OK)
+                    entreprise_entry['communes'].append(commune_entry)
+
+                entreprises_aggregations.append(entreprise_entry)
+
+        return Response(entreprises_aggregations, status=status.HTTP_200_OK)

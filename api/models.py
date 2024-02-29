@@ -55,6 +55,12 @@ class Commune(models.Model):
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+# class Entreprise(models.Model):
+#     agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
+#     nom = models.CharField(max_length=50,default="Orange")
+#     emplacement = models.CharField(max_length=50,default="6")
+
+
     def __str__(self):
         return self.commune
 
