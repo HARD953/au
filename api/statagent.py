@@ -27,29 +27,26 @@ class StatsByAgent(APIView):
         # Filtrer les utilisateurs en fonction de l'ID de l'agent
         utilisateurs_filter = {'id': agent_id} if agent_id else {}
 
-        # Agrégations par utilisateur
-        utilisateurs_aggregations = {}
-        utilisateurs = CustomUser.objects.filter(**utilisateurs_filter).values('id').distinct()
+        # Liste pour stocker les agrégations des utilisateurs
+        utilisateurs_aggregations = []
 
+        # Agrégations par utilisateur
+        utilisateurs = CustomUser.objects.filter(**utilisateurs_filter).values('id').distinct()
         for utilisateur_data in utilisateurs:
             utilisateur_id = utilisateur_data['id']
-            utilisateur_aggregations = {}
+            utilisateur_entry = {'utilisateur_id': utilisateur_id, 'communes': []}
 
             # Agrégations par commune
-            communes_aggregations = {}
             communes = DonneeCollectee.objects.filter(agent=utilisateur_id, **date_filters).values('commune').distinct()
-
             for commune_data in communes:
                 commune = commune_data['commune']
-                commune_aggregations = {}
+                commune_entry = {'commune': commune, 'entreprises': []}
 
                 # Agrégations par entreprise
-                entreprises_aggregations = {}
                 entreprises = DonneeCollectee.objects.filter(agent=utilisateur_id, commune=commune, **date_filters).values('entreprise').distinct()
-
                 for entreprise_data in entreprises:
                     entreprise = entreprise_data['entreprise']
-                    entreprise_aggregations = {}
+                    entreprise_entry = {'entreprise': entreprise, 'etat': {}}
 
                     # Agrégations par état
                     for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
@@ -64,24 +61,22 @@ class StatsByAgent(APIView):
                             montant_total=Sum(Cast('TSP', FloatField())) + Sum(Cast('ODP_value', FloatField()))
                         )
 
-                        # Ajouter la somme des montants pour chaque état
+                        # Calculer les sommes des montants pour chaque état
                         somme_montant_total_tsp = sum(item['montant_total_tsp'] for item in etat_aggregations)
                         somme_montant_total_odp = sum(item['montant_total_odp'] for item in etat_aggregations)
                         somme_montant_total = sum(item['montant_total'] for item in etat_aggregations)
 
-                        entreprise_aggregations[etat_support] = {
+                        entreprise_entry['etat'][etat_support] = {
                             'somme_montant_total_tsp': somme_montant_total_tsp,
                             'somme_montant_total_odp': somme_montant_total_odp,
                             'somme_montant_total': somme_montant_total,
                             'nombre_total': sum(item['nombre_total'] for item in etat_aggregations),
                         }
 
-                    entreprises_aggregations[entreprise] = entreprise_aggregations
+                    commune_entry['entreprises'].append(entreprise_entry)
 
-                communes_aggregations[commune] = entreprises_aggregations
+                utilisateur_entry['communes'].append(commune_entry)
 
-            utilisateurs_aggregations[utilisateur_id] = communes_aggregations
+            utilisateurs_aggregations.append(utilisateur_entry)
 
-        return Response({
-            'utilisateurs_aggregations': utilisateurs_aggregations,
-        }, status=status.HTTP_200_OK)
+        return Response(utilisateurs_aggregations, status=status.HTTP_200_OK)
