@@ -82,77 +82,77 @@ class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer
 
 class SupportPublicitaireListView(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia] 
+    # permission_classes = [IsLanfia] 
     queryset = SupportPublicitaire.objects.all()
     serializer_class = SupportPublicitaireSerializer
 
 class SupportPublicitaireDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia] 
+    # permission_classes = [IsLanfia] 
     queryset = SupportPublicitaire.objects.all()
     serializer_class = SupportPublicitaireSerializer
 
 class MarqueListView(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Marque.objects.all()
     serializer_class = MarqueSerializer
 
 class MarqueListViewD(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Marque.objects.all()
     serializer_class = MarqueSerializer
 
 class VisibiliteListView(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Visibilite.objects.all()
     serializer_class = VisibiliteSerializer
 
 class VisibiliteListViewD(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Visibilite.objects.all()
     serializer_class = VisibiliteSerializer
 
 class EtatListView(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Etat.objects.all()
     serializer_class = EtatSerializer
 
 class EtatListViewD(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Etat.objects.all()
     serializer_class = EtatSerializer
 
 class CanalListView(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Canal.objects.all()
     serializer_class = CanalSerializer
 
 class CanalListViewD(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Canal.objects.all()
     serializer_class = CanalSerializer
 
 class SiteListView(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
 
 class SiteListViewD(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
 
 class CommuneL(generics.ListCreateAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Commune.objects.all()
     serializer_class = CommuneSerializers
 
 class CommuneDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Commune.objects.all()
     serializer_class = CommuneSerializers
 
 class CommuneApp(generics.ListAPIView):
-    permission_classes = [IsLanfia]
+    # permission_classes = [IsLanfia]
     queryset = Commune.objects.all()
     serializer_class = CommuneSerializersApp
 
