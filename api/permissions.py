@@ -10,7 +10,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class IsLanfia(BasePermission):
     def has_permission(self, request, view):
     # Ne donnons l’accès qu’aux utilisateurs  Superadministrateurs authentifiés
-        return bool(request.user and request.user.is_authenticated and request.user.is_agent and request.user.is_active)
+        return bool(request.user and request.user.is_authenticated and request.user.is_agent and request.user.is_active and request.user.is_recenseur)
 
 class IsEntreprise(BasePermission):
     def has_permission(self, request, view):
