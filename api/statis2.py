@@ -86,7 +86,7 @@ class GTotalCollectedDataView(APIView):
 
             # Ajouter une agrégation pour la somme totale sans distinction des états
             total_aggregations['Total'] = DonneeCollectee.objects.filter(
-                **date_filters
+                entreprise=self.request.user.entreprise,**date_filters
             ).aggregate(
                 somme_montant_total_tsp=Sum(Cast('TSP', FloatField())),
                 somme_montant_total_odp=Sum(Cast('ODP_value', FloatField())),
