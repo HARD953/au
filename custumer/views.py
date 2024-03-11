@@ -90,9 +90,8 @@ class BlacklistTokenUpdateView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class UserSerializer1(generics.ListAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all().values('entreprise').distinct()
     serializer_class = UserSerializer1
-
 
 # @api_view(['POST'])
 # @permission_classes([AllowAny])
