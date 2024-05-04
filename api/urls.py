@@ -8,7 +8,7 @@ from .etatsupport import *
 from .filtre import *
 
 urlpatterns = [
-    path('donneescollectees/<str:start_date>/<str:end_date>/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
+    path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
     path('agent/', DonneeCollecteeListAgent.as_view(), name='all-collectee-list'),
     path('donneescollecteesall/', DonneeCollecteeListAll.as_view(), name='donnee-collectee-list'),
     path('statbyetat/', StatByEtat.as_view(), name='stat-collectee-list'),
