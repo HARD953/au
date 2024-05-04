@@ -7,14 +7,13 @@ from django.utils import timezone
 
 class SupportPublicitaire(models.Model):
     type_support = models.CharField(max_length=50)
-    longueur= models.CharField(max_length=50)
-    largeur= models.CharField(max_length=50)
-    taux=models.IntegerField()
+    surface= models.CharField(max_length=50)
     def __str__(self):
         return self.type_support
     
 class Marque(models.Model):
     marque = models.CharField(max_length=50)
+    surface = models.CharField(max_length=50, blank=True)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -69,6 +68,7 @@ class DonneeCollectee(models.Model):
     entreprise = models.CharField(max_length=50, blank=True)
     Marque = models.CharField(max_length=50, blank=True)
     commune = models.CharField(max_length=50, blank=True)  # Utilise ForeignKey pour lier à la table Commune
+    quartier = models.CharField(max_length=50, blank=True)
     type_support = models.CharField(max_length=50, blank=True)
     surface = models.CharField(max_length=50, blank=True)
     surfaceODP = models.CharField(max_length=50, blank=True)
@@ -81,6 +81,7 @@ class DonneeCollectee(models.Model):
     date_collecte = models.DateTimeField(auto_now_add=True, blank=True)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
     duree = models.CharField(max_length=50, blank=True)
+    anciennete = models.BooleanField(default=False, blank=True)
     TSP = models.CharField(max_length=50, default=12, blank=True)
     ODP = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50, default=1, blank=True)

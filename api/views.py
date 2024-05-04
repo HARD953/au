@@ -25,19 +25,16 @@ class DonneeCollecteeCreate(generics.CreateAPIView):
         else:
             serializer.save(agent=self.request.user)
 
-class DonneeCollecteeList(generics.ListAPIView):
+class DonneeCollecteeListAgent(generics.ListAPIView):
     permission_classes = [IsAuthenticated] 
-    serializer_class = DonneeCollecteeSerializer# Assurez-vous que l'utilisateur est authentifié
+    serializer_class = DonneeCollecteeSerializer # Assurez-vous que l'utilisateur est authentifié
+    
     def get_queryset(self):
         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
         user = self.request.user
-        if user.is_agent:  # Vérifie si l'utilisateur est connecté
-            return DonneeCollectee.objects.all()
-        elif user.is_recenseur:
-            current_date = datetime.now().date()
-            return DonneeCollectee.objects.filter(agent=user,create__date=current_date)
-        else:
-            return DonneeCollectee.objects.filter(entreprise=user.entreprise)
+        current_date = datetime.now().date()
+        return DonneeCollectee.objects.filter(agent=user)
+
         
 class DonneeCollecteeListAll(generics.ListAPIView):
     permission_classes = [IsAuthenticated] 
@@ -157,3 +154,72 @@ class CommuneApp(generics.ListAPIView):
     serializer_class = CommuneSerializersApp
 
 
+from django.db.models import Q
+
+class DonneeCollecteeList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DonneeCollecteeSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        # Récupérer les paramètres de date de début et de fin depuis les paramètres d'URL
+        start_date_str = self.kwargs.get('start_date')
+        end_date_str = self.kwargs.get('end_date')
+
+        # Convertir les chaînes de date en objets datetime.date si elles sont fournies
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date() if start_date_str else None
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date() if end_date_str else None
+
+        # Récupérer le queryset de tous les objets DonneeCollectee
+        queryset = DonneeCollectee.objects.all()
+
+        # Filtrer le queryset en fonction des dates fournies
+        if start_date and end_date:
+            queryset = queryset.filter(create__date__range=(start_date, end_date))
+        elif start_date:
+            queryset = queryset.filter(create__date__gte=start_date)
+        elif end_date:
+            queryset = queryset.filter(create__date__lte=end_date)
+        
+        # Créer un dictionnaire de filtres pour les autres champs
+        filters_dict = {
+            'entreprise': 'MTN CI',
+            'Marque': 'MTN CI',
+            'commune': 'cocody',
+            'quartier': '',
+            # 'type_support': 'Affiche',
+            # 'canal': 'franchise',
+            # 'etat_support': 'Bon',
+            # 'typesite': '',
+            # 'visibilite': 'Bonne',
+            # # 'anciennete': True,
+            # 'duree': '12',
+            # 'surface': '4'
+        }
+
+        # Créer un dictionnaire de correspondance entre les noms de champ dans le modèle DonneeCollectee
+        # et les noms de champ attendus dans le dictionnaire de filtres
+        field_mapping = {
+            'entreprise': 'entreprise',
+            'Marque': 'Marque',
+            'commune': 'commune',
+            'quartier': 'quartier',
+            'type_support': 'type_support',
+            'canal': 'canal',
+            'etat_support': 'etat_support',
+            'typesite': 'typesite',
+            'visibilite': 'visibilite',
+            'anciennete': 'anciennete',
+            'duree': 'duree',
+            'surface': 'surface'
+        }
+        # Appliquer les filtres dynamiquement en parcourant le dictionnaire de filtres
+        for key, value in filters_dict.items():
+            if key in field_mapping:
+                field_name = field_mapping[key]
+                # Construire le filtre pour ce champ spécifique avec icontains
+                queryset = queryset.filter(**{f'{field_name}__icontains': value})
+        if user.is_agent:
+            return queryset
+        else:
+            return queryset.filter(entreprise=user.entreprise)

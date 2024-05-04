@@ -7,11 +7,13 @@ from .statagent import *
 from .etatsupport import *
 
 urlpatterns = [
-    path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
+    path('donneescollectees/<str:start_date>/<str:end_date>/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
+    path('agent/', DonneeCollecteeListAgent.as_view(), name='all-collectee-list'),
     path('donneescollecteesall/', DonneeCollecteeListAll.as_view(), name='donnee-collectee-list'),
     path('statbyetat/', StatByEtat.as_view(), name='stat-collectee-list'),
     path('statbyetatall/', StatByEtatAll.as_view(), name='stat-collectee-list'),
     path('all/', Allcollecte.as_view(), name='all-collectee-list'),
+
     path('donneescollectees/<int:pk>/', DonneeCollecteeDetailView.as_view(), name='donnee-collectee-detail'),
     path('collectedata/', DonneeCollecteeCreate.as_view(), name='donnee-collectee-create'),
     path('commune/', CommuneL.as_view(), name='commune-collectee-create'),
@@ -27,7 +29,6 @@ urlpatterns = [
     path('canal/<int:pk>/', CanalListViewD.as_view(), name='canal'),
     path('marque/<int:pk>/', MarqueListViewD.as_view(), name='marque'),
     path('site/<int:pk>/', SiteListViewD.as_view(), name='site'),
-
     path('supports/', SupportPublicitaireListView.as_view(), name='support-publicitaire-list'),
     path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name='support-publicitaire-detail'),
     
