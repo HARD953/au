@@ -8,6 +8,8 @@ from django.utils import timezone
 class SupportPublicitaire(models.Model):
     type_support = models.CharField(max_length=50)
     surface= models.CharField(max_length=50)
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.type_support
     

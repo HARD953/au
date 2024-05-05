@@ -258,6 +258,7 @@ class DonneeCollecteeList(generics.GenericAPIView):
 
         # Créer un dictionnaire de correspondance entre les noms de champ dans le modèle DonneeCollectee
         # et les noms de champ attendus dans le dictionnaire de filtres
+        
         field_mapping = {
             'entreprise': 'entreprise',
             'Marque': 'Marque',
