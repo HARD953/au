@@ -10,6 +10,7 @@ from .filtre import *
 urlpatterns = [
     path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
     path('agent/', DonneeCollecteeListAgent.as_view(), name='all-collectee-list'),
+    path('agent/<int:pk>/', DonneeCollecteeDetailView1.as_view(), name='all-collectee-list1'),
     path('donneescollecteesall/', DonneeCollecteeListAll.as_view(), name='donnee-collectee-list'),
     path('statbyetat/', StatByEtat.as_view(), name='stat-collectee-list'),
     path('statbyetatall/', StatByEtatAll.as_view(), name='stat-collectee-list'),

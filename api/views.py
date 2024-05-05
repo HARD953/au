@@ -34,7 +34,11 @@ class DonneeCollecteeListAgent(generics.ListAPIView):
         user = self.request.user
         current_date = datetime.now().date()
         return DonneeCollectee.objects.filter(agent=user)
-
+    
+class DonneeCollecteeDetailView1(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DonneeCollecteeSerializer
+    def get_queryset(self):
+        return DonneeCollectee.objects.all()
         
 class DonneeCollecteeListAll(generics.ListAPIView):
     permission_classes = [IsAuthenticated] 
