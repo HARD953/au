@@ -10,4 +10,4 @@ admin.site.register(Marque)
 admin.site.register(Visibilite)
 admin.site.register(Etat)
 admin.site.register(Commune)
-
+admin.site.register(Quartier)

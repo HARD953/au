@@ -25,6 +25,16 @@ class CommuneSerializersApp(serializers.ModelSerializer):
     class Meta:
         model = Commune
         fields = ["commune"]
+
+class QuartierSerialiser1(serializers.ModelSerializer):
+    class Meta:
+        model = Quartier
+        fields = ["commune","quartier"]
+
+class QuartierSerialiser2(serializers.ModelSerializer):
+    class Meta:
+        model = Quartier
+        fields = ["quartier"]
         
 
 # class TauxODPSerializer(serializers.ModelSerializer):

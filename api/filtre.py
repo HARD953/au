@@ -44,6 +44,15 @@ class SiteListViewF(generics.ListCreateAPIView):
     queryset = Site.objects.all()
     serializer_class = SiteSerializerF
 
+class QuartierF(generics.ListCreateAPIView):
+    # permission_classes = [IsLanfia]
+    queryset =Quartier.objects.all()
+    serializer_class = QuartierSerialiser1
+
+class QuartierF2(generics.ListCreateAPIView):
+    # permission_classes = [IsLanfia]
+    queryset =Quartier.objects.all()
+    serializer_class = QuartierSerialiser2
 
 class QuartierListViewF(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia]

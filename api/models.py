@@ -64,6 +64,10 @@ class Commune(models.Model):
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class Quartier(models.Model):
+    commune = models.CharField(max_length=50,default="Abidjan")
+    quartier= models.CharField(max_length=50,default="Rue 12")
+
 # class Entreprise(models.Model):
 #     agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
 #     nom = models.CharField(max_length=50,default="Orange")
