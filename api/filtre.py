@@ -13,11 +13,19 @@ from rest_framework import status
 from .permissions import *
 from datetime import datetime
 from .serializers2 import *
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.pagination import BasePagination
+
+class NoPagination(BasePagination):
+    def paginate_queryset(self, queryset, request, view=None):
+        return None
+
+    def get_paginated_response(self, data):
+        return data
 
 class SupportPublicitaireListViewF(generics.ListCreateAPIView):
     queryset = SupportPublicitaire.objects.all()
     serializer_class = SupportPublicitaireSerializerF
-
 
 class MarqueListViewF(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia]
@@ -49,10 +57,30 @@ class QuartierF(generics.ListCreateAPIView):
     queryset =Quartier.objects.all()
     serializer_class = QuartierSerialiser1
 
-class QuartierF2(generics.ListCreateAPIView):
+
+class NoPagination(BasePagination):
+    def paginate_queryset(self, queryset, request, view=None):
+        return None
+
+    def get_paginated_response(self, data):
+        return data
+
+class QuartierListe(ListCreateAPIView):
+    # permission_classes = [IsLanfia]
+    queryset = Quartier.objects.all()
+    serializer_class = QuartierSerialiser2
+    pagination_class = NoPagination  # Utilisez votre pagination personnalisée
+
+
+class QuartierCommune(generics.ListCreateAPIView):
+    # permission_classes = [IsLanfia]
+    queryset = Quartier.objects.all()
+    serializer_class = QuartierSerialiser1
+
+class QuartierCommuneDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsLanfia]
     queryset =Quartier.objects.all()
-    serializer_class = QuartierSerialiser2
+    serializer_class = QuartierSerialiser1
 
 class QuartierListViewF(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia]

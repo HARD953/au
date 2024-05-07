@@ -29,7 +29,7 @@ class CommuneSerializersApp(serializers.ModelSerializer):
 class QuartierSerialiser1(serializers.ModelSerializer):
     class Meta:
         model = Quartier
-        fields = ["commune","quartier"]
+        fields = '__all__'
 
 class QuartierSerialiser2(serializers.ModelSerializer):
     class Meta:

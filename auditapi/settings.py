@@ -122,9 +122,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
 ], 
-'DEFAULT_AUTHENTICATION_CLASSES': [
-     'rest_framework_simplejwt.authentication.JWTAuthentication'
-    ],    
+# 'DEFAULT_AUTHENTICATION_CLASSES': [
+#      'rest_framework_simplejwt.authentication.JWTAuthentication'
+#     ],    
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,  # Nombre d'éléments par page
 }
@@ -157,22 +157,22 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 AUTH_USER_MODEL = 'custumer.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://127.0.0.1:3000",
-    "http://localhost:3000/",
-    "https://localhost:3000/",
-    "http://127.0.0.1:3000/",
-    "https://127.0.0.1:3000/",
-    "http://127.0.0.1:8000",
-    "https://127.0.0.1:8000",
-    "http://localhost:8000",
-    "https://localhost:8000",
-    "https://auditvisibilite.lanfiasave.com/",
-    "http://auditvisibilite.lanfiasave.com/"
-    ]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "https://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "https://127.0.0.1:3000",
+#     "http://localhost:3000/",
+#     "https://localhost:3000/",
+#     "http://127.0.0.1:3000/",
+#     "https://127.0.0.1:3000/",
+#     "http://127.0.0.1:8000",
+#     "https://127.0.0.1:8000",
+#     "http://localhost:8000",
+#     "https://localhost:8000",
+#     "https://auditvisibilite.lanfiasave.com/",
+#     "http://auditvisibilite.lanfiasave.com/"
+#     ]
 
 CORS_ALLOW_METHODS = [
     "DELETE",

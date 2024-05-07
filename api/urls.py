@@ -48,6 +48,7 @@ urlpatterns = [
     path('fsite/', SiteListViewF.as_view(), name='site'),
     path('fsupports/', SupportPublicitaireListViewF.as_view(), name='support-publicitaire-list'),
     path('communeapp/', CommuneApp.as_view(), name='commune-collectee-app'),
-    path('quartier/', QuartierF.as_view(), name='quartier'),
-    path('fquartier/', QuartierF2.as_view(), name='quartier'),
+    path('fquartier/', QuartierListe.as_view(), name='quartier'),
+    path('quartier/', QuartierCommune.as_view(), name='quartier'),
+    path('quartier/<int:pk>/', QuartierCommuneDetail.as_view(), name='quartier'),
 ]

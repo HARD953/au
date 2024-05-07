@@ -67,6 +67,8 @@ class Commune(models.Model):
 class Quartier(models.Model):
     commune = models.CharField(max_length=50,default="Abidjan")
     quartier= models.CharField(max_length=50,default="Rue 12")
+    def __str__(self):
+        return self.quartier
 
 # class Entreprise(models.Model):
 #     agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
