@@ -13,6 +13,14 @@ class SupportPublicitaire(models.Model):
     def __str__(self):
         return self.type_support
     
+class Taux(models.Model):
+    TTAP = models.CharField(max_length=50)
+    TTPAT= models.CharField(max_length=50)
+    TAE = models.CharField(max_length=50)
+    TAEAT = models.CharField(max_length=50)
+    def __str__(self):
+        return f"Donnée #{self.TTAP}_{self.TTPAT}_{self.TAE}_{self.TAEAT}"
+    
 class Marque(models.Model):
     marque = models.CharField(max_length=50)
     surface = models.CharField(max_length=50, blank=True)
@@ -60,8 +68,6 @@ class Commune(models.Model):
 #     agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
 #     nom = models.CharField(max_length=50,default="Orange")
 #     emplacement = models.CharField(max_length=50,default="6")
-
-
     def __str__(self):
         return self.commune
 
@@ -86,6 +92,10 @@ class DonneeCollectee(models.Model):
     anciennete = models.BooleanField(default=False, blank=True)
     TSP = models.CharField(max_length=50, default=12, blank=True)
     ODP = models.BooleanField(default=False, blank=True)
+    TTAP = models.BooleanField(default=False, blank=True)
+    TTPAT = models.BooleanField(default=False, blank=True)
+    TAEAT = models.BooleanField(default=False, blank=True)
+    TAE = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50, default=1, blank=True)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -93,11 +103,17 @@ class DonneeCollectee(models.Model):
     longitude = models.FloatField(blank=True)
 
     def save(self, *args, **kwargs):
-        # Récupérer les taux en fonction de la commune
+        if not self.surface:
+            # Si la surface est vide, récupérer la surface à partir du SupportPublicitaire
+            try:
+                support = SupportPublicitaire.objects.get(type_support=self.type_support)
+                self.surface = support.surface
+            except SupportPublicitaire.DoesNotExist:
+                self.surface=0
+        # Calculer TSP et ODP_value
         taux_commune = Commune.objects.get(commune=self.commune)
         self.tauxODP = taux_commune.tauxODP
         self.tauxTSP = taux_commune.tauxTSP
-        # Calculer le TSP en multipliant la surface par la durée
         self.TSP = float(self.surface) * float(self.duree) * float(self.tauxTSP)
         if self.ODP:
             self.ODP_value = float(self.surfaceODP) * float(self.duree) * float(self.tauxODP)

@@ -44,10 +44,26 @@ class SiteListViewF(generics.ListCreateAPIView):
     queryset = Site.objects.all()
     serializer_class = SiteSerializerF
 
+
 class QuartierListViewF(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia]
-    queryset = DonneeCollectee.objects.all()
     serializer_class = FiltreQuartier
+
+    def get_queryset(self):
+        # Récupérer tous les objets DonneeCollectee
+        queryset = DonneeCollectee.objects.all()
+
+        # Filtrer les éléments uniques (distincts) par quartier
+        unique_quartiers = set()
+        filtered_queryset = []
+        
+        for obj in queryset:
+            if obj.quartier not in unique_quartiers:
+                unique_quartiers.add(obj.quartier)
+                filtered_queryset.append(obj)
+        
+        return filtered_queryset
+
 
 
 
