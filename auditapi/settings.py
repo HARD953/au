@@ -93,9 +93,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',   # Replace with your database name
         'USER': 'postgres',       # Replace with your database username
-        'PASSWORD': 'UjPiglpJBlMFLQflDRRCBBrmmIulDuVN',  # Replace with your database password
+        'PASSWORD': 'utoFVaRvpMLrfyPjEuPgVoKyuJcvUvKv',  # Replace with your database password
         'HOST': 'roundhouse.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-        'PORT': '53766',         # Replace with your database port if needed (the default is 3306)
+        'PORT': '48055',         # Replace with your database port if needed (the default is 3306)
     }
 }
 
@@ -124,7 +124,7 @@ REST_FRAMEWORK = {
 ], 
 'DEFAULT_AUTHENTICATION_CLASSES': [
      'rest_framework_simplejwt.authentication.JWTAuthentication'
-    ],
+    ],    
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,  # Nombre d'éléments par page
 }
