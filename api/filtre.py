@@ -71,11 +71,22 @@ class QuartierListe(ListCreateAPIView):
     serializer_class = QuartierSerialiser2
     pagination_class = NoPagination  # Utilisez votre pagination personnalisée
 
+class VilleListe(ListCreateAPIView):
+    # permission_classes = [IsLanfia]
+    queryset = Ville.objects.all()
+    serializer_class = VilleSerializers
+    pagination_class = NoPagination  # Utilisez votre pagination personnalisée
+
+class VilleDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = [IsLanfia]
+    queryset =Ville.objects.all()
+    serializer_class = VilleSerializers
 
 class QuartierCommune(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia]
     queryset = Quartier.objects.all()
     serializer_class = QuartierSerialiser1
+
 
 class QuartierCommuneDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsLanfia]
@@ -100,6 +111,8 @@ class QuartierListViewF(generics.ListCreateAPIView):
                 filtered_queryset.append(obj)
         
         return filtered_queryset
+    
+
 
 
 

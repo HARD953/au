@@ -56,6 +56,13 @@ class Visibilite(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.visibilite
+    
+class Ville(models.Model):
+    ville = models.CharField(max_length=50,default="Abidjan")
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.ville
 
 class Commune(models.Model):
     commune = models.CharField(max_length=50,default="Abidjan")
@@ -73,6 +80,8 @@ class Commune(models.Model):
 class Quartier(models.Model):
     commune = models.CharField(max_length=50,default="Abidjan")
     quartier= models.CharField(max_length=50,default="Rue 12")
+    create = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.quartier
 
@@ -87,6 +96,7 @@ class DonneeCollectee(models.Model):
     agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
     entreprise = models.CharField(max_length=50, blank=True)
     Marque = models.CharField(max_length=50, blank=True)
+    ville = models.CharField(max_length=50, blank=True)  # Utilise ForeignKey pour lier à la table Commune
     commune = models.CharField(max_length=50, blank=True)  # Utilise ForeignKey pour lier à la table Commune
     quartier = models.CharField(max_length=50, blank=True)
     type_support = models.CharField(max_length=50, blank=True)

@@ -21,6 +21,11 @@ class CommuneSerializers(serializers.ModelSerializer):
         model = Commune
         fields = '__all__'
 
+class VilleSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Ville
+        fields = '__all__'
+
 class CommuneSerializersApp(serializers.ModelSerializer):
     class Meta:
         model = Commune

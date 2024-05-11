@@ -267,6 +267,7 @@ class DonneeCollecteeList(generics.GenericAPIView):
             'entreprise': 'entreprise',
             'Marque': 'Marque',
             'commune': 'commune',
+            'ville': 'ville',
             'quartier': 'quartier',
             'type_support': 'type_support',
             'canal': 'canal',
