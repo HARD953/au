@@ -158,6 +158,8 @@ class CommuneApp(generics.ListAPIView):
     serializer_class = CommuneSerializersApp
 
 
+
+
 from django.db.models import Q
 
 # class DonneeCollecteeList(generics.ListAPIView):

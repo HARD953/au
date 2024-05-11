@@ -99,6 +99,12 @@ class QuartierCommuneDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset =Quartier.objects.all()
     serializer_class = QuartierSerialiser1
 
+class CommuneApp(generics.ListAPIView):
+    # permission_classes = [IsLanfia]
+    queryset = Commune.objects.all()
+    serializer_class = CommuneSerializersApp
+    pagination_class = NoPagination 
+
 class QuartierListViewF(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia]
     serializer_class = FiltreQuartier

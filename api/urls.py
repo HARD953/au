@@ -51,6 +51,7 @@ urlpatterns = [
     path('ville/', VilleListeP.as_view(), name='ville-collectee-app'),
     path('ville/<int:pk>/', VilleDetail.as_view(), name='ville-collecteed-app'),
     path('communeapp/', CommuneApp.as_view(), name='commune-collectee-app'),
+    path('fcommune/', CommuneApp.as_view(), name='commune-collectee-app'),
     path('fquartier/', QuartierListe.as_view(), name='quartier1'),
     path('quartier/', QuartierCommune.as_view(), name='quartier2'),
     path('quartier/<int:pk>/', QuartierCommuneDetail.as_view(), name='quartier3'),
