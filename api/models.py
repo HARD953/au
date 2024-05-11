@@ -60,7 +60,13 @@ class Visibilite(models.Model):
 class Commune(models.Model):
     commune = models.CharField(max_length=50,default="Abidjan")
     tauxODP = models.CharField(max_length=50,default="6")
-    tauxTSP = models.CharField(max_length=50,default="7")
+    tauxTSP=models.CharField(max_length=50,default="7")
+    tauxAP = models.CharField(max_length=50)
+    tauxAPA= models.CharField(max_length=50)
+    tauxAPT = models.CharField(max_length=50)
+    tauxAE = models.CharField(max_length=50)
+    tauxAEA = models.CharField(max_length=50)
+    tauxAET = models.CharField(max_length=50)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -98,10 +104,12 @@ class DonneeCollectee(models.Model):
     anciennete = models.BooleanField(default=False, blank=True)
     TSP = models.CharField(max_length=50, default=12, blank=True)
     ODP = models.BooleanField(default=False, blank=True)
-    TTAP = models.BooleanField(default=False, blank=True)
-    TTPAT = models.BooleanField(default=False, blank=True)
-    TAEAT = models.BooleanField(default=False, blank=True)
-    TAE = models.BooleanField(default=False, blank=True)
+    AP = models.BooleanField(default=False, blank=True)
+    APA = models.BooleanField(default=False, blank=True)
+    APT = models.BooleanField(default=False, blank=True)
+    AE = models.BooleanField(default=False, blank=True)
+    AEA = models.BooleanField(default=False, blank=True)
+    AET = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50, default=1, blank=True)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -119,8 +127,26 @@ class DonneeCollectee(models.Model):
         # Calculer TSP et ODP_value
         taux_commune = Commune.objects.get(commune=self.commune)
         self.tauxODP = taux_commune.tauxODP
-        self.tauxTSP = taux_commune.tauxTSP
-        self.TSP = float(self.surface) * float(self.duree) * float(self.tauxTSP)
+        self.tauxAP = taux_commune.tauxAP
+        self.tauxAPA = taux_commune.tauxAPA
+        self.tauxAPT = taux_commune.tauxAPT
+        self.tauxAE = taux_commune.tauxAE
+        self.tauxAEA = taux_commune.tauxAEA
+        self.tauxAET = taux_commune.tauxAET  
+        if self.AP:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAP)
+        elif self.APA:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAPA)
+        elif self.APT:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAPT)
+        elif self.AE:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAE)
+        elif self.AEA:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAEA)
+        elif self.AET:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAET)
+        else: 
+            self.TSP = float(self.surface) * float(self.duree)
         if self.ODP:
             self.ODP_value = float(self.surfaceODP) * float(self.duree) * float(self.tauxODP)
         else:
