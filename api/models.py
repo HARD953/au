@@ -65,6 +65,7 @@ class Ville(models.Model):
         return self.ville
 
 class Commune(models.Model):
+    ville = models.CharField(max_length=50,default="Abidjan")
     commune = models.CharField(max_length=50,default="Abidjan")
     tauxODP = models.CharField(max_length=50,default="6")
     tauxTSP=models.CharField(max_length=50,default="7")
