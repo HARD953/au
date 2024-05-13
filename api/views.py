@@ -57,10 +57,10 @@ class Allcollecte(generics.ListAPIView):
         return DonneeCollectee.objects.filter(agent=user)
 
            
-class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = DonneeCollecteeSerializer
-    def get_queryset(self):
-        return DonneeCollectee.objects.all()
+# class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     serializer_class = DonneeCollecteeSerializer
+#     def get_queryset(self):
+#         return DonneeCollectee.objects.all()
         
 class NombreSupportsParAgent(APIView):
     def get(self, request):
@@ -81,6 +81,30 @@ class NombreSupportsParAgent(APIView):
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()  # Récupérer l'instance à mettre à jour
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            # Gérer les images
+            if 'image_support' in request.FILES:
+                # Supprimer l'ancienne image si nécessaire
+                if instance.image_support:
+                    instance.image_support.delete()
+
+                # Enregistrer la nouvelle image
+                instance.image_support = request.FILES['image_support']
+
+            # Enregistrer les autres données mises à jour
+            updated_instance = serializer.save()
+
+            # Répondre avec les données mises à jour
+            return Response(self.get_serializer(updated_instance).data)
+        else:
+            # En cas d'erreurs de validation
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class SupportPublicitaireListView(generics.ListCreateAPIView):
     # permission_classes = [IsLanfia] 
