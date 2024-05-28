@@ -93,9 +93,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',   # Replace with your database name
         'USER': 'postgres',       # Replace with your database username
-        'PASSWORD': 'utoFVaRvpMLrfyPjEuPgVoKyuJcvUvKv',  # Replace with your database password
+        'PASSWORD': 'fUKMIjLsyvkiRPyNYMgUtwDlkVFKvbuk',  # Replace with your database password
         'HOST': 'roundhouse.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-        'PORT': '48055',         # Replace with your database port if needed (the default is 3306)
+        'PORT': '46247',         # Replace with your database port if needed (the default is 3306)
     }
 }
 

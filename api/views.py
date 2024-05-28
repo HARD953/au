@@ -13,6 +13,8 @@ from rest_framework import status
 from .permissions import *
 from datetime import datetime
 
+from .importdata import *
+
 class DonneeCollecteeCreate(generics.CreateAPIView):
     queryset = DonneeCollectee.objects.all()
     serializer_class = DonneeCollecteeSerializer1
@@ -26,7 +28,7 @@ class DonneeCollecteeCreate(generics.CreateAPIView):
             serializer.save(agent=self.request.user)
 
 class DonneeCollecteeListAgent(generics.ListAPIView):
-    permission_classes = [IsAuthenticated] 
+    
     serializer_class = DonneeCollecteeSerializer # Assurez-vous que l'utilisateur est authentifié
     
     def get_queryset(self):

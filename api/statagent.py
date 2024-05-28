@@ -80,3 +80,37 @@ class StatsByAgent(APIView):
             utilisateurs_aggregations.append(utilisateur_entry)
 
         return Response(utilisateurs_aggregations, status=status.HTTP_200_OK)
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.db.models import Count, Sum
+from django.db.models.functions import TruncDate
+from django.db.models import FloatField
+from django.db.models.functions import Cast
+from .models import DonneeCollectee
+from datetime import datetime
+
+class DeleData(APIView):
+    def get(self, request, start_date=None, end_date=None):
+        try:
+            # Convertir les dates en objets date si elles sont fournies
+            if start_date:
+                start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            if end_date:
+                end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
+            # Définir les filtres de date en fonction des paramètres fournis
+            date_filters = {}
+            if start_date:
+                date_filters['create__date__gte'] = start_date
+            if end_date:
+                date_filters['create__date__lte'] = end_date
+
+            # Supprimer les enregistrements correspondant aux filtres
+            deleted_count, _ = DonneeCollectee.objects.filter(**date_filters).delete()
+
+            return Response({'deleted_count': deleted_count}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

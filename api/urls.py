@@ -7,7 +7,10 @@ from .statagent import *
 from .etatsupport import *
 from .filtre import *
 
+from .importdata import*
+
 urlpatterns = [
+    path('importerdonneesexcel/', importer_donnees_de_excel, name='importer_donnees_excel'),
     path('donneescollectees/', DonneeCollecteeList.as_view(), name='donnee-collectee-list'),
     path('agent/', DonneeCollecteeListAgent.as_view(), name='all-collectee-list'),
     path('agent/<int:pk>/', DonneeCollecteeDetailView1.as_view(), name='all-collectee-list1'),
@@ -31,10 +34,11 @@ urlpatterns = [
     path('marque/<int:pk>/', MarqueListViewD.as_view(), name='marque'),
     path('site/<int:pk>/', SiteListViewD.as_view(), name='site'),
     path('supports/', SupportPublicitaireListView.as_view(), name='support-publicitaire-list'),
-    path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name='support-publicitaire-detail'),
+    path('supports/<int:pk>/', SupportPublicitaireDetailView.as_view(), name= 'support-publicitaire-detail'),
     
     # # Statistiques générales
     path('statagent/<str:start_date>/<str:end_date>/', StatsByAgent.as_view(), name='general-agent'),
+    path('deletedata/<str:start_date>/<str:end_date>/', DeleData.as_view(), name='delete-data'),
     path('statagentid/<str:start_date>/<str:end_date>/<int:agent_id>/', StatsByAgent.as_view(), name='general-agents'),
     path('gcollecte/<str:start_date>/<str:end_date>/', GTotalCollectedDataView.as_view(), name='general-statistics'),
     path('collecte/<str:start_date>/<str:end_date>/', TotalCollectedDataView.as_view(), name='statistics-etat'),
