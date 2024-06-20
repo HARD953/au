@@ -94,7 +94,7 @@ class Quartier(models.Model):
         return self.commune
 
 class DonneeCollectee(models.Model):
-    agent=models.ForeignKey(CustomUser,on_delete=models.CASCADE,default=1)
+    agent = models.ForeignKey(CustomUser,null=True, on_delete=models.SET_NULL)
     entreprise = models.CharField(max_length=50, blank=True)
     Marque = models.CharField(max_length=50, blank=True)
     ville = models.CharField(max_length=50, blank=True)  # Utilise ForeignKey pour lier à la table Commune
@@ -111,6 +111,10 @@ class DonneeCollectee(models.Model):
     observation = models.CharField(max_length=50, blank=True)
     date_collecte = models.DateTimeField(auto_now_add=True, blank=True)
     image_support = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
+    signature = models.ImageField(upload_to='collecte_images/', null=True, blank=True)
+    nom1 = models.CharField(max_length=50, blank=True)
+    nom2 = models.CharField(max_length=50, blank=True)
+    nom3 = models.CharField(max_length=50, blank=True)
     duree = models.CharField(max_length=50, blank=True)
     anciennete = models.BooleanField(default=False, blank=True)
     TSP = models.CharField(max_length=50, default=12, blank=True)
@@ -126,6 +130,15 @@ class DonneeCollectee(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     latitude = models.FloatField(blank=True)
     longitude = models.FloatField(blank=True)
+    is_deleted= models.BooleanField(default=False)
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
+
+    def restore(self):
+        self.is_deleted = False
+        self.save()
 
     def save(self, *args, **kwargs):
         if not self.surface:
@@ -167,7 +180,14 @@ class DonneeCollectee(models.Model):
 
     def __str__(self):
         return f"Donnée #{self.id} pour {self.type_support}"
-
+    
+    # class Meta:
+    #     permissions = [
+    #         ("view_donneecollectee", "Can view DonneeCollectee"),
+    #         ("add_donneecollectee", "Can add DonneeCollectee"),
+    #         ("change_donneecollectee", "Can change DonneeCollectee"),
+    #         ("delete_donneecollectee", "Can delete DonneeCollectee"),
+    #     ]
 
 # def calculate_tsp(instance):
 #     return instance.surface * instance.duree * 7

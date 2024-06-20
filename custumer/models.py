@@ -56,3 +56,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    # class Meta:
+    #     permissions = [
+    #         ("view_customUser", "Can view customUser"),
+    #         ("add_customUser", "Can add customUser"),
+    #         ("change_customUser", "Can change customUser"),
+    #         ("delete_customUser", "Can delete customUser"),
+    #     ]

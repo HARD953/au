@@ -24,7 +24,9 @@ class DonneeCollecteeCreate(generics.CreateAPIView):
         # Associer l'utilisateur connecté comme propriétaire du Bien
         if self.request.user.is_anonymous:
             serializer.save()
+            # importer_donnees_de_excel("data.xlsx")
         else:
+            # importer_donnees_de_excel("data.xlsx")
             serializer.save(agent=self.request.user)
 
 class DonneeCollecteeListAgent(generics.ListAPIView):
@@ -81,9 +83,10 @@ class NombreSupportsParAgent(APIView):
         
 
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = DonneeCollectee.objects.all()
+    queryset = DonneeCollectee.objects.filter(is_deleted=False)
     serializer_class = DonneeCollecteeSerializer
-
+    permission_classes = [permissions.DjangoModelPermissions]
+    
     def update(self, request, *args, **kwargs):
         instance = self.get_object()  # Récupérer l'instance à mettre à jour
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -106,6 +109,11 @@ class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
         else:
             # En cas d'erreurs de validation
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
         
 
 class SupportPublicitaireListView(generics.ListCreateAPIView):
