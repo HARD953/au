@@ -125,6 +125,12 @@ class DonneeCollectee(models.Model):
     AE = models.BooleanField(default=False, blank=True)
     AEA = models.BooleanField(default=False, blank=True)
     AET = models.BooleanField(default=False, blank=True)
+    tauxAP = models.BooleanField(default=False, blank=True)
+    tauxAPA = models.BooleanField(default=False, blank=True)
+    tauxAPT = models.BooleanField(default=False, blank=True)
+    tauxAE = models.BooleanField(default=False, blank=True)
+    tauxAEA = models.BooleanField(default=False, blank=True)
+    tauxAET = models.BooleanField(default=False, blank=True)
     ODP_value = models.CharField(max_length=50, default=1, blank=True)
     create = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -150,25 +156,25 @@ class DonneeCollectee(models.Model):
                 self.surface=0
         # Calculer TSP et ODP_value
         taux_commune = Commune.objects.get(commune=self.commune)
-        self.tauxODP = taux_commune.tauxODP
-        self.tauxAP = taux_commune.tauxAP
-        self.tauxAPA = taux_commune.tauxAPA
-        self.tauxAPT = taux_commune.tauxAPT
-        self.tauxAE = taux_commune.tauxAE
-        self.tauxAEA = taux_commune.tauxAEA
-        self.tauxAET = taux_commune.tauxAET  
-        if self.AP:
-            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAP)
-        elif self.APA:
-            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAPA)
-        elif self.APT:
-            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAPT)
-        elif self.AE:
-            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAE)
-        elif self.AEA:
-            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAEA)
-        elif self.AET:
-            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAET)
+        self.tauxODP1 = taux_commune.tauxODP
+        self.tauxAP1 = taux_commune.tauxAP
+        self.tauxAPA1 = taux_commune.tauxAPA
+        self.tauxAPT1 = taux_commune.tauxAPT
+        self.tauxAE1 = taux_commune.tauxAE
+        self.tauxAEA1 = taux_commune.tauxAEA
+        self.tauxAET1 = taux_commune.tauxAET  
+        if self.tauxAP:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAP1)
+        elif self.tauxAPA:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAPA1)
+        elif self.tauxAPT:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAPT1)
+        elif self.tauxAE:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAE1)
+        elif self.tauxAEA:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAEA1)
+        elif self.tauxAET:
+            self.TSP = float(self.surface) * float(self.duree) * float(self.tauxAET1)
         else: 
             self.TSP = float(self.surface) * float(self.duree)
         if self.ODP:
