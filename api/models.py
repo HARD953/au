@@ -182,7 +182,7 @@ class DonneeCollectee(models.Model):
         else: 
             self.TSP = float(self.surface) * float(self.duree)
         if self.ODP:
-            self.ODP_value = float(self.surfaceODP) * float(self.duree) * float(self.tauxODP)
+            self.ODP_value = float(self.surfaceODP) * float(self.duree) * float(self.tauxODP1)
         else:
             self.ODP_value = 0
 
