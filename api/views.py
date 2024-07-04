@@ -37,7 +37,7 @@ class DonneeCollecteeListAgent(generics.ListAPIView):
         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
         user = self.request.user
         current_date = datetime.now().date()
-        return DonneeCollectee.objects.filter(agent=user)
+        return DonneeCollectee.objects.filter(agent=user,is_deleted="False")
     
 class DonneeCollecteeDetailView1(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonneeCollecteeSerializer
@@ -50,7 +50,7 @@ class DonneeCollecteeListAll(generics.ListAPIView):
     def get_queryset(self):
         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
         user = self.request.user
-        return DonneeCollectee.objects.filter(agent=user)
+        return DonneeCollectee.objects.filter(agent=user,is_deleted="False")
 
 class Allcollecte(generics.ListAPIView):
     permission_classes = [IsAuthenticated] 
@@ -58,7 +58,7 @@ class Allcollecte(generics.ListAPIView):
     def get_queryset(self):
         # Filtrer les objets DonneeCollectee pour l'utilisateur connecté et l'entreprise associée
         user = self.request.user
-        return DonneeCollectee.objects.filter(agent=user)
+        return DonneeCollectee.objects.filter(agent=user,is_deleted="False")
 
            
 # class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -85,7 +85,7 @@ class NombreSupportsParAgent(APIView):
 class DonneeCollecteeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = DonneeCollectee.objects.filter(is_deleted=False)
     serializer_class = DonneeCollecteeSerializer
-    permission_classes = [permissions.DjangoModelPermissions]
+    # permission_classes = [permissions.DjangoModelPermissions]
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()  # Récupérer l'instance à mettre à jour
@@ -211,7 +211,7 @@ class DonneeCollecteeList(generics.ListAPIView):
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date() if end_date_str else None
 
         # Récupérer le queryset de tous les objets DonneeCollectee
-        queryset = DonneeCollectee.objects.all()
+        queryset = DonneeCollectee.objects.filter(is_deleted="False")
 
         # Filtrer le queryset en fonction des dates fournies
         if start_date and end_date:
@@ -264,94 +264,18 @@ class DonneeCollecteeList(generics.ListAPIView):
             return queryset.filter(entreprise=user.entreprise)
         
 
-from rest_framework import generics
-from .models import DonneeCollectee
-from .serializers import DonneeCollecteeSerializer
-from django.http import JsonResponse
-
-class DonneeCollecteeList(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = DonneeCollecteeSerializer
-
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        queryset = DonneeCollectee.objects.all()
-
-        # Récupérer les données POST envoyées avec la requête
-        filters_dict = request.data
-
-        # Récupérer les paramètres de date de début et de fin
-        start_date_str = filters_dict.get('start_date')
-        end_date_str = filters_dict.get('end_date')
-
-        # Convertir les chaînes de date en objets datetime.date si elles sont fournies
-        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date() if start_date_str else None
-        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date() if end_date_str else None
-
-        # Filtrer le queryset en fonction des dates fournies
-        if start_date and end_date:
-            queryset = queryset.filter(create__date__range=(start_date, end_date))
-        elif start_date:
-            queryset = queryset.filter(create__date__gte=start_date)
-        elif end_date:
-            queryset = queryset.filter(create__date__lte=end_date)
-
-        # Créer un dictionnaire de correspondance entre les noms de champ dans le modèle DonneeCollectee
-        # et les noms de champ attendus dans le dictionnaire de filtres
-        
-        field_mapping = {
-            'entreprise': 'entreprise',
-            'Marque': 'Marque',
-            'commune': 'commune',
-            'ville': 'ville',
-            'quartier': 'quartier',
-            'type_support': 'type_support',
-            'canal': 'canal',
-            'etat_support': 'etat_support',
-            'typesite': 'typesite',
-            'visibilite': 'visibilite',
-            'anciennete': 'anciennete',
-            'duree': 'duree',
-            'surface': 'surface'
-        }
-
-        # Appliquer les filtres dynamiques en parcourant le dictionnaire de filtres
-        for key, value in filters_dict.items():
-            if key in field_mapping and key not in ['start_date', 'end_date']:
-                field_name = field_mapping[key]
-                # Construire le filtre pour ce champ spécifique avec icontains
-                queryset = queryset.filter(**{f'{field_name}__icontains': value})
-
-        # Appliquer le filtre supplémentaire pour l'utilisateur non-agent
-        if not user.is_agent:
-            queryset = queryset.filter(entreprise=user.entreprise)
-
-        # Sérialiser le queryset filtré
-        serializer = self.serializer_class(queryset, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-
 # from rest_framework import generics
-# from rest_framework.pagination import PageNumberPagination
-# from rest_framework.response import Response
 # from .models import DonneeCollectee
 # from .serializers import DonneeCollecteeSerializer
 # from django.http import JsonResponse
-# from datetime import datetime
-
-# class StandardResultsSetPagination(PageNumberPagination):
-#     page_size = 100
-#     page_size_query_param = 'page_size'
-#     max_page_size = 200
 
 # class DonneeCollecteeList(generics.GenericAPIView):
-#     # permission_classes = [IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
 #     serializer_class = DonneeCollecteeSerializer
-#     pagination_class = StandardResultsSetPagination
 
 #     def post(self, request, *args, **kwargs):
-#         # user = request.user
-#         queryset = DonneeCollectee.objects.all()
+#         user = request.user
+#         queryset = DonneeCollectee.objects.filter(is_deleted="False")
 
 #         # Récupérer les données POST envoyées avec la requête
 #         filters_dict = request.data
@@ -374,6 +298,7 @@ class DonneeCollecteeList(generics.GenericAPIView):
 
 #         # Créer un dictionnaire de correspondance entre les noms de champ dans le modèle DonneeCollectee
 #         # et les noms de champ attendus dans le dictionnaire de filtres
+        
 #         field_mapping = {
 #             'entreprise': 'entreprise',
 #             'Marque': 'Marque',
@@ -398,13 +323,88 @@ class DonneeCollecteeList(generics.GenericAPIView):
 #                 queryset = queryset.filter(**{f'{field_name}__icontains': value})
 
 #         # Appliquer le filtre supplémentaire pour l'utilisateur non-agent
-#         # if not user.is_agent:
-#         #     queryset = queryset.filter(entreprise=user.entreprise)
+#         if not user.is_agent:
+#             queryset = queryset.filter(entreprise=user.entreprise)
 
-#         # Pagination des résultats
-#         paginator = self.pagination_class()
-#         paginated_queryset = paginator.paginate_queryset(queryset, request)
+#         # Sérialiser le queryset filtré
+#         serializer = self.serializer_class(queryset, many=True)
+#         return JsonResponse(serializer.data, safe=False)
 
-#         # Sérialiser le queryset paginé
-#         serializer = self.serializer_class(paginated_queryset, many=True)
-#         return paginator.get_paginated_response(serializer.data)
+
+from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from .models import DonneeCollectee
+from .serializers import DonneeCollecteeSerializer
+from django.http import JsonResponse
+from datetime import datetime
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 200
+
+class DonneeCollecteeList(generics.GenericAPIView):
+    # permission_classes = [IsAuthenticated]
+    serializer_class = DonneeCollecteeSerializer
+    pagination_class = StandardResultsSetPagination
+
+    def post(self, request, *args, **kwargs):
+        # user = request.user
+        queryset = DonneeCollectee.objects.all()
+
+        # Récupérer les données POST envoyées avec la requête
+        filters_dict = request.data
+
+        # Récupérer les paramètres de date de début et de fin
+        start_date_str = filters_dict.get('start_date')
+        end_date_str = filters_dict.get('end_date')
+
+        # Convertir les chaînes de date en objets datetime.date si elles sont fournies
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date() if start_date_str else None
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date() if end_date_str else None
+
+        # Filtrer le queryset en fonction des dates fournies
+        if start_date and end_date:
+            queryset = queryset.filter(create__date__range=(start_date, end_date))
+        elif start_date:
+            queryset = queryset.filter(create__date__gte=start_date)
+        elif end_date:
+            queryset = queryset.filter(create__date__lte=end_date)
+
+        # Créer un dictionnaire de correspondance entre les noms de champ dans le modèle DonneeCollectee
+        # et les noms de champ attendus dans le dictionnaire de filtres
+        field_mapping = {
+            'entreprise': 'entreprise',
+            'Marque': 'Marque',
+            'commune': 'commune',
+            'ville': 'ville',
+            'quartier': 'quartier',
+            'type_support': 'type_support',
+            'canal': 'canal',
+            'etat_support': 'etat_support',
+            'typesite': 'typesite',
+            'visibilite': 'visibilite',
+            'anciennete': 'anciennete',
+            'duree': 'duree',
+            'surface': 'surface'
+        }
+
+        # Appliquer les filtres dynamiques en parcourant le dictionnaire de filtres
+        for key, value in filters_dict.items():
+            if key in field_mapping and key not in ['start_date', 'end_date']:
+                field_name = field_mapping[key]
+                # Construire le filtre pour ce champ spécifique avec icontains
+                queryset = queryset.filter(**{f'{field_name}__icontains': value})
+
+        # Appliquer le filtre supplémentaire pour l'utilisateur non-agent
+        # if not user.is_agent:
+        #     queryset = queryset.filter(entreprise=user.entreprise)
+
+        # Pagination des résultats
+        paginator = self.pagination_class()
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
+
+        # Sérialiser le queryset paginé
+        serializer = self.serializer_class(paginated_queryset, many=True)
+        return paginator.get_paginated_response(serializer.data)
