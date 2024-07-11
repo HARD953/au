@@ -37,7 +37,7 @@ class StatsByAgent(APIView):
             utilisateur_entry = {'utilisateur_id': utilisateur_id, 'communes': []}
 
             # Agrégations par commune
-            communes = DonneeCollectee.objects.filter(agent=utilisateur_id, **date_filters).values('commune').distinct()
+            communes = DonneeCollectee.objects.filter(agent=utilisateur_id, **date_filters,is_deleted="False").values('commune').distinct()
             for commune_data in communes:
                 commune = commune_data['commune']
                 commune_entry = {'commune': commune, 'entreprises': []}

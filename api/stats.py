@@ -26,7 +26,7 @@ class TotalCollectedDataView(APIView):
         # Agrégations par commune avec les filtres de date
         if self.request.user.is_agent:
             communes_aggregations = {}
-            communes = DonneeCollectee.objects.filter(**date_filters).values('commune').distinct()
+            communes = DonneeCollectee.objects.filter(**date_filters,is_deleted="False").values('commune').distinct()
             for commune_data in communes:
                 commune = commune_data['commune']
                 commune_aggregations = {}
@@ -75,7 +75,7 @@ class TotalCollectedDataView(APIView):
         else:
             communes_aggregations = {}
             communes = DonneeCollectee.objects.filter(
-                entreprise=self.request.user.entreprise, **date_filters
+                entreprise=self.request.user.entreprise, **date_filters,is_deleted="False"
             ).values('commune').distinct()
             for commune_data in communes:
                 commune = commune_data['commune']

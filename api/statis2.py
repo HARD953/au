@@ -28,7 +28,7 @@ class GTotalCollectedDataView(APIView):
         if self.request.user.is_agent:
             for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
                 etat_aggregations = DonneeCollectee.objects.filter(
-                    etat_support=etat_support, **date_filters
+                    etat_support=etat_support, **date_filters,is_deleted="False"
                 ).annotate(
                     date=TruncDate('create')
                 ).values('date').annotate(
@@ -52,7 +52,7 @@ class GTotalCollectedDataView(APIView):
 
             # Ajouter une agrégation pour la somme totale sans distinction des états
             total_aggregations['Total'] = DonneeCollectee.objects.filter(
-                **date_filters
+                **date_filters,is_deleted="False"
             ).aggregate(
                 somme_montant_total_tsp=Sum(Cast('TSP', FloatField())),
                 somme_montant_total_odp=Sum(Cast('ODP_value', FloatField())),
@@ -62,7 +62,7 @@ class GTotalCollectedDataView(APIView):
         else:
             for etat_support in ['Bon', 'Défraichis', 'Détérioré']:
                 etat_aggregations = DonneeCollectee.objects.filter(
-                    entreprise=self.request.user.entreprise,etat_support=etat_support, **date_filters
+                    entreprise=self.request.user.entreprise,etat_support=etat_support, **date_filters,is_deleted="False"
                 ).annotate(
                     date=TruncDate('create')
                 ).values('date').annotate(
@@ -86,7 +86,7 @@ class GTotalCollectedDataView(APIView):
 
             # Ajouter une agrégation pour la somme totale sans distinction des états
             total_aggregations['Total'] = DonneeCollectee.objects.filter(
-                entreprise=self.request.user.entreprise,**date_filters
+                entreprise=self.request.user.entreprise,**date_filters,is_deleted="False"
             ).aggregate(
                 somme_montant_total_tsp=Sum(Cast('TSP', FloatField())),
                 somme_montant_total_odp=Sum(Cast('ODP_value', FloatField())),
