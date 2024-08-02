@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+from decouple import config
 import django_heroku
 
 
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e5f2hh&#9j+qwx&e#m58_0a9%irey982fno95r)4dq+yd_h#vr'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,11 +92,11 @@ WSGI_APPLICATION = 'auditapi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',   # Replace with your database name
-        'USER': 'postgres',       # Replace with your database username
-        'PASSWORD': 'kzaEWqxzLfWcJmQUAnibsxaFDCDKFTqq',  # Replace with your database password
-        'HOST': 'roundhouse.proxy.rlwy.net',    # Replace with your database host (e.g., 'localhost' for local development)
-        'PORT': '57068',         # Replace with your database port if needed (the default is 3306)
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', cast=int),
     }
 }
 
