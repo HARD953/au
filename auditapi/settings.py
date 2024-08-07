@@ -172,6 +172,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "https://auditvisibilite.lanfiasave.com/",
     "http://auditvisibilite.lanfiasave.com/"
+    "https://visitrack360.com/",
+    "http://visitrack360.com/"
     ]
 
 CORS_ALLOW_METHODS = [
